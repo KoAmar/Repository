@@ -1,8 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
- 
- 
+
+
+@{
+    System.Diagnostics.Debug.Assert(User.Identity != null, "User.Identity != null");
+}
 @if(User.Identity.IsAuthenticated)
 {
     <p>@User.Identity.Name</p>
