@@ -73,8 +73,8 @@ namespace Repository.Controllers
             return View(model);
         }
  
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
+        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             // удаляем аутентификационные куки

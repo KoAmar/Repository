@@ -28,8 +28,4 @@
     <_ContentIncludedByDefault Remove="Views\Users\ChangePassword.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Views\Users\ChangePassword.cshtml" />
-  </ItemGroup>
-
 </Project>

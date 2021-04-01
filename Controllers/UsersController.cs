@@ -38,6 +38,7 @@ namespace Repository.Controllers
             return View(model);
         }
  
+        
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -82,7 +83,7 @@ namespace Repository.Controllers
             }
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> ChangePassword(string id)
+        public async Task<IActionResult> AdminChangePassword(string id)
         {
             User user = await _userManager.FindByIdAsync(id);
             if (user == null)
@@ -94,7 +95,7 @@ namespace Repository.Controllers
         }
  
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> AdminChangePassword(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
             {

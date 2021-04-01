@@ -10,9 +10,9 @@
 {
     <p>@User.Identity.Name</p>
  
-    <form method="post" asp-controller="Account" asp-action="Logout">
-        <input type="submit" value="Выход" />
-    </form>
+    <button class="btn btn-primary" asp-controller="Account" asp-action="Logout">Выход</button>
+    
+    
 }
 else
 {

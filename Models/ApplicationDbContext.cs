@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Models
 {
-    public sealed class ApplicationContext : IdentityDbContext<User>
+    public sealed class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
             Database.EnsureCreated();

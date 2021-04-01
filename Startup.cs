@@ -27,10 +27,19 @@ namespace Repository
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<ApplicationContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>();
+            services.AddIdentity<User, IdentityRole>(opts=> {
+                    opts.User.RequireUniqueEmail = true;    // уникальный email
+                    opts.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz"; // допустимые символы
+                    
+                    opts.Password.RequiredLength = 8;   // минимальная длина
+                    opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
+                    opts.Password.RequireLowercase = true; // требуются ли символы в нижнем регистре
+                    opts.Password.RequireUppercase = true; // требуются ли символы в верхнем регистре
+                    opts.Password.RequireDigit = true; // требуются ли цифры
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
         }
 
