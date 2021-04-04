@@ -1,18 +1,17 @@
-﻿@{
+﻿@using System.Diagnostics
+@{
     ViewData["Title"] = "Home Page";
 }
 
 
 @{
-    System.Diagnostics.Debug.Assert(User.Identity != null, "User.Identity != null");
+    Debug.Assert(User.Identity != null, "User.Identity != null");
 }
-@if(User.Identity.IsAuthenticated)
+@if (User.Identity.IsAuthenticated)
 {
     <p>@User.Identity.Name</p>
- 
+
     <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Выход</a>
-    
-    
 }
 else
 {
