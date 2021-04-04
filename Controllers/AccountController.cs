@@ -64,7 +64,6 @@ namespace Repository.Controllers
                 {
                     return Redirect(model.ReturnUrl);
                 }
-                Console.WriteLine("hello");
                 return RedirectToAction("Index", "Home");
             }
 

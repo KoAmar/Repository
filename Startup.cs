@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +30,15 @@ namespace Repository
             services.AddControllersWithViews();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
+            services.AddTransient<IUserValidator<User>, CustomUserValidator>();
             services.AddIdentity<User, IdentityRole>(opts=> {
-                    opts.User.RequireUniqueEmail = true;    // уникальный email
-                    opts.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz"; // допустимые символы
+                    // opts.User.RequireUniqueEmail = true;    // уникальный email
+                    // opts.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz"; // допустимые символы
+                    // opts.User.AllowedUserNameCharacters = 
+                    //     new Regex(@"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)
+                    //                 (?<=[0-9a-z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+
+                    //                 [a-z0-9]{2,17}))$").ToString();
                     
                     opts.Password.RequiredLength = 8;   // минимальная длина
                     opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
