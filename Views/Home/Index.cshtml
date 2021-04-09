@@ -1,20 +1,20 @@
 ﻿@using System.Diagnostics
 @{
-    ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Home Page";
 }
 
 
 @{
-    Debug.Assert(User.Identity != null, "User.Identity != null");
+  Debug.Assert(User.Identity != null, "User.Identity != null");
 }
 @if (User.Identity.IsAuthenticated)
 {
-    <p>@User.Identity.Name</p>
+  <p>@User.Identity.Name</p>
 
-    <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Выход</a>
+  <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Выход</a>
 }
 else
 {
-    <a asp-controller="Account" asp-action="Login">Вход</a>
-    <a asp-controller="Account" asp-action="Register">Регистрация</a>
+  <a asp-controller="Account" asp-action="Login">Вход</a>
+  <a asp-controller="Account" asp-action="Register">Регистрация</a>
 }

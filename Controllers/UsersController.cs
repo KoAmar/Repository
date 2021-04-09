@@ -21,6 +21,7 @@ namespace Repository.Controllers
             return View(_userManager.Users.ToList());
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -56,7 +57,6 @@ namespace Repository.Controllers
             user.Email = model.Email;
             user.UserName = model.Email;
             user.Year = model.Year;
-
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded) return RedirectToAction("Index");
 
