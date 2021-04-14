@@ -2,9 +2,9 @@
 
 <h2>Вход в приложение</h2>
 
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <form method="post">
+<form method="post">
+  <div class="row justify-content-around">
+    <div class="col-md-8">
       <div asp-validation-summary="All" class="text-danger"></div>
       <div class="form-group">
         <label asp-for="Email"></label>
@@ -16,16 +16,27 @@
         <input asp-for="Password" class="form-control"/>
         <span asp-validation-for="Password" class="text-danger"></span>
       </div>
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox"
-               class="custom-control-input"
-               asp-for="@Model.RememberMe">
-        <label class="custom-control-label"
-               asp-for="@Model.RememberMe">
-          Запомнить меня?
-        </label>
+      <div class="row justify-content-between px-3">
+
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox"
+                 class="custom-control-input"
+                 asp-for="@Model.RememberMe">
+          <label class="custom-control-label"
+                 asp-for="@Model.RememberMe">
+            Запомнить меня?
+          </label>
+        </div>
+        <a asp-controller="Account" asp-action="ForgotPassword">Забыли пароль?</a>
+
       </div>
+      @* <div class="col-md-6 j"> *@
       <button type="submit" class="btn btn-primary mt-3">Войти</button>
-    </form>
+      @* </div> *@
+      @* <div class="col-md-6"> *@
+      @* </div> *@
+
+    </div>
   </div>
-</div>
+
+</form>
