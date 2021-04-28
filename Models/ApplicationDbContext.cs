@@ -8,7 +8,15 @@ namespace Repository.Models
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            // CourseProjects = courseProjects;
+            // Database.EnsureCreated();
         }
+        
+        public DbSet<CourseProject> CourseProjects { get; set; }
+        //
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     // modelBuilder.Ignore<Company>();
+        // }
     }
 }

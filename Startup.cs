@@ -26,15 +26,9 @@ namespace Repository
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IUserValidator<User>, CustomUserValidator>();
+            services.AddScoped<IProjectsRepos, CourseProjRepos>();
             services.AddIdentity<User, IdentityRole>(opts =>
                 {
-                    // opts.User.RequireUniqueEmail = true;    // уникальный email
-                    // opts.User.AllowedUserNameCharacters = ".@abcdefghijklmnopqrstuvwxyz"; // допустимые символы
-                    // opts.User.AllowedUserNameCharacters = 
-                    //     new Regex(@"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)
-                    //                 (?<=[0-9a-z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+
-                    //                 [a-z0-9]{2,17}))$").ToString();
-
                     opts.Password.RequiredLength = 8; // минимальная длина
                     opts.Password.RequireNonAlphanumeric = false; // требуются ли не алфавитно-цифровые символы
                     opts.Password.RequireLowercase = true; // требуются ли символы в нижнем регистре

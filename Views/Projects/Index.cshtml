@@ -1,0 +1,15 @@
+﻿@model IEnumerable<CourseProject>
+
+@{
+  ViewBag.Title = "Главная";
+}
+
+@foreach (var project in Model)
+{
+  <p>@project.Id</p>;
+  <p>@project.CreationDate</p>;
+  <p>@project.Title</p>;
+  <p>@project.Description</p>;
+  <p>@project.ImagePath</p>;
+  <p>@project.UserId</p>;
+}
