@@ -3,13 +3,22 @@
 @{
   ViewBag.Title = "Главная";
 }
+<div class="card">
+  @foreach (var project in Model)
+  {
+    <div class="card-header"></div>
+    <div class="card-body">
+      <h3 class="card-title">
+        @project.Title
+      </h3>
+      <h6 class="card-subtitle text-muted">
+        @project.CreationDate
+      </h6>
 
-@foreach (var project in Model)
-{
-  <p>@project.Id</p>;
-  <p>@project.CreationDate</p>;
-  <p>@project.Title</p>;
-  <p>@project.Description</p>;
-  <p>@project.ImagePath</p>;
-  <p>@project.UserId</p>;
-}
+      <p class="card-text">@project.Description</p>
+      @* <p>@project.ImagePath</p>; *@
+      @* <img alt="Card image cap" class="card-img-top" src=""> *@
+    </div>
+    <div class="card-footer"></div>
+  }
+</div>
