@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CourseProject>
+﻿@model IEnumerable<Repository.Models.DatabaseModels.CourseProject>
 
 @{
   ViewBag.Title = "Главная";
@@ -7,6 +7,8 @@
   @foreach (var project in Model)
   {
     <div class="card-header"></div>
+    <div class="card-link"> </div>
+
     <div class="card-body">
       <h3 class="card-title">
         @project.Title
@@ -19,6 +21,10 @@
       @* <p>@project.ImagePath</p>; *@
       @* <img alt="Card image cap" class="card-img-top" src=""> *@
     </div>
-    <div class="card-footer"></div>
+    <div class="card-footer">
+      <div class="d-flex justify-content-around">
+        <a class="btn btn-primary" asp-controller="Projects" asp-action="Project" asp-route-id="@project.Id">Открыть</a>
+      </div>
+    </div>
   }
 </div>

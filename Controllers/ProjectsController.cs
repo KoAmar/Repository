@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repository.Models;
+using Repository.Models.DatabaseInterfaces;
 
 namespace Repository.Controllers
 {
@@ -12,11 +13,15 @@ namespace Repository.Controllers
             _courseProjects = courseProjects;
         }
 
-        // GET
         public IActionResult Index()
         {
-            
             return View(_courseProjects.GetAllCourseProjects());
         }
+
+        public IActionResult Project(string id)
+        {
+            return View(_courseProjects.GetCourseProject(id));
+        }
+        
     }
 }

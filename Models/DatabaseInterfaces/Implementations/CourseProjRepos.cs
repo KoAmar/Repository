@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Repository.Models.DatabaseModels;
 
-namespace Repository.Models
+namespace Repository.Models.DatabaseInterfaces.Implementations
 {
     public class CourseProjRepos:IProjectsRepos
     {
@@ -18,12 +18,12 @@ namespace Repository.Models
             return _context.CourseProjects;
         }
 
-        public CourseProject GetCourseProject(int id)
+        public CourseProject GetCourseProject(string id)
         {
             return  _context.CourseProjects.Find(id);
         }
 
-        public CourseProject DeleteCourseProject(int id)
+        public CourseProject DeleteCourseProject(string id)
         {
             var project = _context.CourseProjects.Find(id);
 

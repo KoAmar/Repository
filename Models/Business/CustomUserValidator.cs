@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Repository.Models.DatabaseModels;
 
 namespace Repository.Models
 {

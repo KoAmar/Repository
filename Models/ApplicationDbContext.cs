@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Repository.Models.DatabaseModels;
 
 namespace Repository.Models
 {
@@ -13,6 +14,7 @@ namespace Repository.Models
         }
         
         public DbSet<CourseProject> CourseProjects { get; set; }
+        public DbSet<File> Files { get; set; }
         //
         // protected override void OnModelCreating(ModelBuilder modelBuilder)
         // {

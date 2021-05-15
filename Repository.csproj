@@ -35,4 +35,8 @@
     <_ContentIncludedByDefault Remove="Views\Users\ChangePassword.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\files" />
+  </ItemGroup>
+
 </Project>
