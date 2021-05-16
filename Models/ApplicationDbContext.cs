@@ -14,7 +14,7 @@ namespace Repository.Models
         }
         
         public DbSet<CourseProject> CourseProjects { get; set; }
-        public DbSet<File> Files { get; set; }
+        public DbSet<FileModel> Files { get; set; }
         //
         // protected override void OnModelCreating(ModelBuilder modelBuilder)
         // {

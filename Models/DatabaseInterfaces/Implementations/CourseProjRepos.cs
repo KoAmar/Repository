@@ -4,7 +4,7 @@ using Repository.Models.DatabaseModels;
 
 namespace Repository.Models.DatabaseInterfaces.Implementations
 {
-    public class CourseProjRepos:IProjectsRepos
+    public class CourseProjRepos : IProjectsRepos
     {
         private readonly ApplicationDbContext _context;
 
@@ -20,7 +20,7 @@ namespace Repository.Models.DatabaseInterfaces.Implementations
 
         public CourseProject GetCourseProject(string id)
         {
-            return  _context.CourseProjects.Find(id);
+            return _context.CourseProjects.Find(id);
         }
 
         public CourseProject DeleteCourseProject(string id)
@@ -37,8 +37,7 @@ namespace Repository.Models.DatabaseInterfaces.Implementations
 
             return project;
         }
-        
-        
+
 
         public CourseProject AddCourseProject(CourseProject courseProject)
         {
@@ -55,8 +54,6 @@ namespace Repository.Models.DatabaseInterfaces.Implementations
             _context.SaveChanges();
 
             return courseProjectChanges;
-
         }
-
     }
 }
