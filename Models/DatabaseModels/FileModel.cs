@@ -11,6 +11,7 @@ namespace Repository.Models.DatabaseModels
         public string Name { get; set; }
         [NotNull]
         public string FilePath { get; set; }
+        //todo uncomment this
         // [NotNull]
         [MaxLength(450)]
         public string ProjectId { get; set; }

@@ -26,21 +26,24 @@ namespace Repository.Controllers
             return View(_context.Files.ToList());
         }
 
-        //TODO understand why image duplicates in view 
         [HttpPost]
         public async Task<IActionResult> AddFile(IFormFile uploadedFile)
         {
             if (uploadedFile == null) return RedirectToAction("Index");
+            
+            const string webRootPath = "files";
+            var uniqueFileName = $"{Guid.NewGuid()}_{uploadedFile.FileName}";
+            var projectFilePath = Path.Combine(webRootPath, uniqueFileName);
+            var fullFilePath = Path.Combine(_appEnvironment.WebRootPath,projectFilePath);
 
-            // путь к папке Files
-            var path = "/files/" + uploadedFile.FileName;
-            // сохраняем файл в папку Files в каталоге wwwroot
-            await using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+            await uploadedFile.CopyToAsync(new FileStream(fullFilePath, FileMode.Create));
+
+            var file = new FileModel
             {
-                await uploadedFile.CopyToAsync(fileStream);
-            }
-
-            var file = new FileModel {Name = uploadedFile.FileName, FilePath = path, Id = Guid.NewGuid().ToString()};
+                Name = uploadedFile.FileName,
+                FilePath = projectFilePath,
+                Id = Guid.NewGuid().ToString()
+            };
 
             _context.Files.Add(file);
             await _context.SaveChangesAsync();
