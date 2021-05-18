@@ -1,0 +1,23 @@
+﻿@model Repository.Models.DatabaseModels.CourseProject
+
+<div class="row justify-content-center">
+
+  <div class="col-md-6">
+    <h2 class="mb-3">Регистрация нового пользователя</h2>
+
+    <form method="post">
+      <div asp-validation-summary="All" class="text-danger mb-2"></div>
+      <div class="form-group">
+        <label asp-for="Title">Название</label>
+        <input asp-for="Title" class="form-control"/>
+        <span asp-validation-for="Title" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Description">Описание</label>
+        <input asp-for="Description" class="form-control"/>
+        <span asp-validation-for="Description" class="text-danger"></span>
+      </div>
+      <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+  </div>
+</div>

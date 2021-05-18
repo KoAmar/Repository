@@ -3,28 +3,39 @@
 @{
   ViewBag.Title = "Главная";
 }
-<div class="card">
-  @foreach (var project in Model)
-  {
-    <div class="card-header"></div>
-    <div class="card-link"> </div>
+<div class="row justify-content-center">
+  <div class="col-md-8 d-flex flex-column  justify-content-center">
+    <a class="btn btn-link  my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
+    @foreach (var project in Model)
+    {
+      <div class="card">
 
-    <div class="card-body">
-      <h3 class="card-title">
-        @project.Title
-      </h3>
-      <h6 class="card-subtitle text-muted">
-        @project.CreationDate
-      </h6>
+        <div class="card-header"></div>
+        <div class="card-link"> </div>
 
-      <p class="card-text">@project.Description</p>
-      @* <p>@project.ImagePath</p>; *@
-      @* <img alt="Card image cap" class="card-img-top" src=""> *@
-    </div>
-    <div class="card-footer">
-      <div class="d-flex justify-content-around">
-        <a class="btn btn-primary" asp-controller="Projects" asp-action="Project" asp-route-id="@project.Id">Открыть</a>
+        <div class="card-body">
+          <h3 class="card-title">
+            @project.Title
+          </h3>
+          <h6 class="card-subtitle text-muted">
+            @project.CreationDate
+          </h6>
+
+          <p class="card-text">@project.Description</p>
+        </div>
+        <div class="card-footer">
+          <div class="d-flex justify-content-around">
+            <a class="btn btn-info" asp-controller="Projects" asp-action="ProjectInfo" asp-route-id="@project.Id">
+              Открыть
+            </a>
+            <a class="btn btn-info" asp-controller="Projects" asp-action="EditProject" asp-route-id="@project.Id">
+              Редактировать
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
-  }
+    }
+
+    <a class="btn btn-link my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
+  </div>
 </div>

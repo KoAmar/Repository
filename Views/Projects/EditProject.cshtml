@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Repository.Models.DatabaseModels
+@model Repository.ViewModels.ProjectAndFilesViewModel
+
+@inject UserManager<User> _userManager
+
+@{
+  ViewData["Title"] = "Редактирование страницы проекта";
+}
+
+<h2 >@_userManager.FindByIdAsync(Model.Project.UserId).Result.FirstName 
+  @_userManager.FindByIdAsync(Model.Project.UserId).Result.Surname</h2>
+<div class="card">
+  <div class="card-body">
+    <p >@Model.Project.Id</p>
+    <p >@Model.Project.Title</p>
+    <p >@Model.Project.Description</p>
+    <p >@Model.Project.CreationDate</p>
+    <p >@Model.Project.UserId</p>
+  </div>
+</div>
+
+<a class="btn btn-link" asp-controller="Files" asp-action="UploadFile" asp-route-projectId="@Model.Project.Id">
+  Добавить файл
+</a>
+
+<h3>Все файлы</h3>
+@foreach (var f in Model.FileModels)
+{
+  <p>
+    @f.Name --- @f.FilePath
+  </p>
+}

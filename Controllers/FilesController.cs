@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Models;
 using Repository.Models.DatabaseModels;
+using Repository.ViewModels;
 
 namespace Repository.Controllers
 {
@@ -21,20 +23,20 @@ namespace Repository.Controllers
             _appEnvironment = appEnvironment;
         }
 
-        public IActionResult Index()
+        public IActionResult UploadFile(string projectId)
         {
-            return View(_context.Files.ToList());
+            return View(new ProjectIdViewModel {ProjectId = projectId});
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddFile(IFormFile uploadedFile)
+        public async Task<IActionResult> AddFile(string projectId, IFormFile uploadedFile)
         {
-            if (uploadedFile == null) return RedirectToAction("Index");
-            
-            const string webRootPath = "files";
+            if (uploadedFile == null) return RedirectToAction("Index", "Projects");
+
+            var webRootPath = "files";
             var uniqueFileName = $"{Guid.NewGuid()}_{uploadedFile.FileName}";
             var projectFilePath = Path.Combine(webRootPath, uniqueFileName);
-            var fullFilePath = Path.Combine(_appEnvironment.WebRootPath,projectFilePath);
+            var fullFilePath = Path.Combine(_appEnvironment.WebRootPath, projectFilePath);
 
             await uploadedFile.CopyToAsync(new FileStream(fullFilePath, FileMode.Create));
 
@@ -42,13 +44,14 @@ namespace Repository.Controllers
             {
                 Name = uploadedFile.FileName,
                 FilePath = projectFilePath,
+                ProjectId = projectId,
                 Id = Guid.NewGuid().ToString()
             };
 
             _context.Files.Add(file);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("EditProject", "Projects", new {id = projectId});
         }
     }
 }
