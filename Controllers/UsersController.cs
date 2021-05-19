@@ -1,9 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Repository.Models;
 using Repository.Models.DatabaseModels;
 using Repository.ViewModels;
 
@@ -47,19 +45,35 @@ namespace Repository.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
-            var model = new EditUserViewModel {Id = user.Id, Email = user.Email, Year = user.Year};
+            var model = new RegisterViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                Surname = user.Surname,
+                Patronymic = user.Patronymic,
+                Year = user.Year
+            };
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditUserViewModel model)
+        public async Task<IActionResult> Edit(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
+            
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null) return View(model);
+            
             user.Email = model.Email;
             user.UserName = model.Email;
             user.Year = model.Year;
+
+            if (HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) is IPasswordHasher<User>
+                passwordHasher)
+                user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
+
+
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded) return RedirectToAction("Index");
 

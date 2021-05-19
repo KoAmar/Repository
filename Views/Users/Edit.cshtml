@@ -1,21 +1,67 @@
-﻿@model Repository.ViewModels.EditUserViewModel
+﻿@using Repository.Models.DatabaseModels
+@using Microsoft.AspNetCore.Identity
+@model Repository.ViewModels.RegisterViewModel
+@inject UserManager<User> _userManager
+
 @{
-    ViewBag.Title = "Редактирование пользователя";
+  ViewBag.Title = "Редактирование пользователя";
 }
-<form asp-action="Edit" asp-controller="Users">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <input type="hidden" asp-for="Id"/>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email" class="control-label">Email</label>
-        <input type="text" asp-for="Email" class="form-control"/>
-    </div>
-    <div class="form-group">
-        <label asp-for="Year" class="control-label">Год рождения</label>
-        <input type="number" asp-for="Year" class="form-control"/>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Сохранить" class="btn btn-outline-secondary"/>
-    </div>
-</form>
+<div class="row justify-content-center">
+
+  <div class="col-md-6">
+    <h2 class="mb-3">
+      Редактирование пользователя
+      @{
+        var userId = Model.Id;
+      }
+      @if (userId != null)
+      {
+        @userId
+        @_userManager.FindByIdAsync(userId).Result.Surname
+        @_userManager.FindByIdAsync(userId).Result.FirstName
+        @_userManager.FindByIdAsync(userId).Result.Patronymic
+      }
+    </h2>
+
+    <form method="post" asp-action="Edit" asp-controller="Users">
+      <div asp-validation-summary="All" class="text-danger mb-2"></div>
+      <input type="hidden" asp-for="Id">
+      <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control"/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Surname"></label>
+        <input asp-for="Surname" class="form-control"/>
+        <span asp-validation-for="Surname" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control"/>
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Patronymic"></label>
+        <input asp-for="Patronymic" class="form-control"/>
+        <span asp-validation-for="Patronymic" class="text-danger"></span>
+      </div>
+      <div>
+        <label asp-for="Year"></label><br/>
+        <input asp-for="Year" class="form-control"/>
+        <span asp-validation-for="Year" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="PasswordConfirm"></label>
+        <input asp-for="PasswordConfirm" class="form-control"/>
+        <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+      </div>
+      <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+  </div>
+</div>

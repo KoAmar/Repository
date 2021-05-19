@@ -7,8 +7,11 @@
   ViewData["Title"] = "Страница проекта";
 }
 
-<h2 >@_userManager.FindByIdAsync(Model.Project.UserId).Result.FirstName 
-  @_userManager.FindByIdAsync(Model.Project.UserId).Result.Surname</h2>
+<h2 >
+  @_userManager.FindByIdAsync(Model.Project.UserId).Result.Surname
+  @_userManager.FindByIdAsync(Model.Project.UserId).Result.FirstName
+  @_userManager.FindByIdAsync(Model.Project.UserId).Result.Patronymic
+</h2>
 <div class="card">
   <div class="card-body">
     <p >@Model.Project.Id</p>

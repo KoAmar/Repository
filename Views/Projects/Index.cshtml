@@ -3,9 +3,11 @@
 @{
   ViewBag.Title = "Главная";
 }
+
+<h1 >Список курсовых проектов</h1>
 <div class="row justify-content-center">
   <div class="col-md-8 d-flex flex-column  justify-content-center">
-    <a class="btn btn-link  my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
+    <a class="btn btn-outline-secondary  my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
     @foreach (var project in Model)
     {
       <div class="card">
@@ -25,10 +27,10 @@
         </div>
         <div class="card-footer">
           <div class="d-flex justify-content-around">
-            <a class="btn btn-info" asp-controller="Projects" asp-action="ProjectInfo" asp-route-id="@project.Id">
+            <a class="btn btn-secondary" asp-controller="Projects" asp-action="ProjectInfo" asp-route-id="@project.Id">
               Открыть
             </a>
-            <a class="btn btn-info" asp-controller="Projects" asp-action="EditProject" asp-route-id="@project.Id">
+            <a class="btn btn-secondary" asp-controller="Projects" asp-action="EditProject" asp-route-id="@project.Id">
               Редактировать
             </a>
           </div>
@@ -36,6 +38,6 @@
       </div>
     }
 
-    <a class="btn btn-link my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
+    <a class="btn btn-outline-secondary my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
   </div>
 </div>
