@@ -28,26 +28,6 @@ namespace Repository.Controllers
             return View(_userManager.Users.ToList());
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateUserViewModel model)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-            //todo update all not null fields 
-            var user = new User {Email = model.Email, UserName = model.Email, Year = model.Year};
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded) return RedirectToAction("Index");
-
-            foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
-            return View(model);
-        }
-
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
