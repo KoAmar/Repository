@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Models;
@@ -9,7 +10,7 @@ using Repository.ViewModels;
 namespace Repository.Controllers
 {
     //todo update all not null fields 
-
+    // [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -41,7 +42,6 @@ namespace Repository.Controllers
             foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
             return View(model);
         }
-
 
         public async Task<IActionResult> Edit(string id)
         {
@@ -92,17 +92,19 @@ namespace Repository.Controllers
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user != null)
             {
-                var _passwordValidator =
+                var passwordValidator =
                     HttpContext.RequestServices.GetService(typeof(IPasswordValidator<User>)) as
                         IPasswordValidator<User>;
-                var _passwordHasher =
+                var passwordHasher =
                     HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) as IPasswordHasher<User>;
 
+                if (passwordValidator == null) return View(model);
                 var result =
-                    await _passwordValidator.ValidateAsync(_userManager, user, model.NewPassword);
+                    await passwordValidator.ValidateAsync(_userManager, user, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    user.PasswordHash = _passwordHasher.HashPassword(user, model.NewPassword);
+                    if (passwordHasher != null)
+                        user.PasswordHash = passwordHasher.HashPassword(user, model.NewPassword);
                     await _userManager.UpdateAsync(user);
                     return RedirectToAction("Index");
                 }

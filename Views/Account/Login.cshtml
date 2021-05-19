@@ -3,7 +3,7 @@
 <h2>Вход в приложение</h2>
 
 <form method="post">
-  <div class="row justify-content-around">
+  <div class="row justify-content-around my-5">
     <div class="col-md-8">
       <div asp-validation-summary="All" class="text-danger"></div>
       <div class="form-group">
@@ -16,7 +16,7 @@
         <input asp-for="Password" class="form-control"/>
         <span asp-validation-for="Password" class="text-danger"></span>
       </div>
-      <div class="row justify-content-between px-3">
+      <div class="row justify-content-between mt-4 px-3">
 
         <div class="custom-control custom-checkbox">
           <input type="checkbox"
@@ -27,16 +27,15 @@
             Запомнить меня?
           </label>
         </div>
+        <a asp-controller="Account" asp-action="Register">Регистрация</a>
         <a asp-controller="Account" asp-action="ForgotPassword">Забыли пароль?</a>
-
       </div>
-      @* <div class="col-md-6 j"> *@
-      <button type="submit" class="btn btn-primary mt-3">Войти</button>
-      @* </div> *@
-      @* <div class="col-md-6"> *@
-      @* </div> *@
 
     </div>
   </div>
+  <div class="row justify-content-center">
+    <button type="submit" class="btn btn-primary mt-5" style="min-width: 15rem">Войти</button>
+  </div>
+
 
 </form>

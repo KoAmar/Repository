@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Models;
@@ -10,6 +11,7 @@ using Repository.ViewModels;
 namespace Repository.Controllers
 {
   //todo update all not null fields 
+  // [Authorize(Roles = "Admin")]
   public class RolesController : Controller
   {
     private readonly RoleManager<IdentityRole> _roleManager;

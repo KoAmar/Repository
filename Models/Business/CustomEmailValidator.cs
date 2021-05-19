@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Repository.Models.DatabaseModels;
 
-namespace Repository.Models
+namespace Repository.Models.Business
 {
-    public class CustomUserValidator : IUserValidator<User>
+    public class CustomEmailValidator : IUserValidator<User>
     {
         public Task<IdentityResult> ValidateAsync(UserManager<User> manager, User user)
         {

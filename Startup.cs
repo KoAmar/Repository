@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Repository.Models;
+using Repository.Models.Business;
 using Repository.Models.DatabaseInterfaces;
 using Repository.Models.DatabaseInterfaces.Implementations;
 using Repository.Models.DatabaseModels;
@@ -28,7 +29,7 @@ namespace Repository
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddTransient<IUserValidator<User>, CustomUserValidator>();
+            services.AddTransient<IUserValidator<User>, CustomEmailValidator>();
             services.AddScoped<IProjectsRepos, CourseProjRepos>();
             services.AddIdentity<User, IdentityRole>(opts =>
                 {

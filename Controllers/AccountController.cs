@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Repository.Models;
 using Repository.Models.Business;
 using Repository.Models.DatabaseModels;
 using Repository.ViewModels;
@@ -32,33 +30,47 @@ namespace Repository.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = new User {Email = model.Email, UserName = model.Email};
-            // добавляем пользователя
+            var isEmailAlreadyExists = _userManager.Users.Any(x => x.Email == model.Email);
+            if(isEmailAlreadyExists)
+            {
+                ModelState.AddModelError("Email", "Пользователь с такой почтой уже существует");
+                return View(model);
+            }
+            
+            
+            var user = new User
+            {
+                Email = model.Email,
+                UserName = model.Email,
+                FirstName = model.FirstName,
+                Surname = model.Surname,
+                Patronymic = model.Patronymic,
+                Year = model.Year
+            };
+            
             var result = await _userManager.CreateAsync(user, model.Password);
+            
             if (result.Succeeded)
             {
-                // генерация токена для пользователя
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var callbackUrl = Url.Action(
                     "ConfirmEmail",
                     "Account",
-                    new {userId = user.Id, code = code},
+                    new {userId = user.Id, code},
                     protocol: HttpContext.Request.Scheme);
                 var emailService = new EmailService();
+                
                 await emailService.SendEmailAsync(model.Email, "Confirm your account",
                     $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
-                 // emailService.SendEmailAsync(model.Email,"User", "Confirm your account",
-                 //    $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
-
-                return Content(
-                    "Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+                
+                const string message = "Для завершения регистрации проверьте электронную почту" +
+                                       " и перейдите по ссылке, указанной в письме";
+                return View("Message",message);
             }
-            else
+
+            foreach (var error in result.Errors)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                ModelState.AddModelError(string.Empty, error.Description);
             }
 
             return View(model);
@@ -82,8 +94,7 @@ namespace Repository.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
                 return RedirectToAction("Index", "Home");
-            else
-                return View("Error");
+            return View("Error");
         }
 
         [HttpGet]
@@ -94,7 +105,7 @@ namespace Repository.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
             var user = await _userManager.FindByNameAsync(model.Email);
@@ -113,12 +124,11 @@ namespace Repository.Controllers
                     (model.Email, model.Password, model.RememberMe, false);
             if (result.Succeeded)
             {
+                if (Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
                 return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                ModelState.AddModelError("", "Неправильный логин и (или) пароль");
-            }
+
+            ModelState.AddModelError("", "Неправильный логин и (или) пароль");
 
             return View(model);
         }
@@ -129,6 +139,7 @@ namespace Repository.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]

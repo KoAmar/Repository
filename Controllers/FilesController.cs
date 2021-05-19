@@ -3,6 +3,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,8 @@ using Repository.ViewModels;
 
 namespace Repository.Controllers
 {
+    //todo uncomment this
+    // [Authorize]
     public class FilesController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -3,18 +3,20 @@
   ViewData["Title"] = "Home Page";
 }
 
+<div >
+  @{
+    Debug.Assert(User.Identity != null, "User.Identity != null");
+  }
+  @if (User.Identity.IsAuthenticated)
+  {
+    <p>@User.Identity.Name</p>
 
-@{
-  Debug.Assert(User.Identity != null, "User.Identity != null");
-}
-@if (User.Identity.IsAuthenticated)
-{
-  <p>@User.Identity.Name</p>
+    <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Выход</a>
+  }
+  else
+  {
+    <a asp-controller="Account" asp-action="Login">Вход </a>
+    <a asp-controller="Account" asp-action="Register">Регистрация</a>
+  }
+</div>
 
-  <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Выход</a>
-}
-else
-{
-  <a asp-controller="Account" asp-action="Login">Вход</a>
-  <a asp-controller="Account" asp-action="Register">Регистрация</a>
-}
