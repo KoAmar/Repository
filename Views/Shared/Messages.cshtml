@@ -1,0 +1,10 @@
+﻿@model System.Collections.IEnumerable
+@{
+    ViewData["Title"] = "Message";
+}
+
+@foreach(var message in Model)
+{
+
+    <h3 class="text-info">@message</h3>
+}
