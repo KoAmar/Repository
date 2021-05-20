@@ -9,13 +9,14 @@ namespace Repository.Models.DatabaseModels
         // [Key]
 
         public string Id { get; set; }
-        [NotNull]
+        [Required]
         public DateTime CreationDate { get; set; }
         [MaxLength(450)]
-        [NotNull]
+        [Required]
         public string UserId { get; set; }
-        [NotNull]
+        [Required(ErrorMessage = "Требуется название!")]
         public string Title { get; set; }
+        [Required(ErrorMessage = "Требуется описание!")]
         public string Description { get; set; }
     }
 }

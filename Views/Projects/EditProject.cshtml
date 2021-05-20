@@ -8,32 +8,69 @@
   ViewData["Title"] = "Редактирование страницы проекта";
 }
 <h2 >Редактирование страницы курсовго проекта</h2>
+<form method="post">
+  <div class="row justify-content-center mt-3">
+    <div class="col-md-8 ">
+      <div class="card">
+        <div class="card-body">
+          <div asp-validation-summary="All" class="text-danger mb-2"></div>
+          <input type="hidden" asp-for="Project.Id">
+          <input type="hidden" asp-for="Project.CreationDate">
+          <input type="hidden" asp-for="Project.UserId">
+          <input type="hidden" asp-for="FileModels">
+          <div class="form-group">
+            <label asp-for="Project.Title">Название курсового проекта: </label>
+            <input asp-for="Project.Title" class="form-control"/>
+            <span asp-validation-for="Project.Title" class="text-danger"></span>
+          </div>
 
-<div class="card">
-  <div class="card-body">
-    <p >@Model.Project.Id</p>
-    <p >@Model.Project.Title</p>
-    <p >@Model.Project.Description</p>
-    <p >@Model.Project.CreationDate</p>
-    <p >
-      @_userManager.FindByIdAsync(Model.Project.UserId).Result.Surname
-      @_userManager.FindByIdAsync(Model.Project.UserId).Result.FirstName
-      @_userManager.FindByIdAsync(Model.Project.UserId).Result.Patronymic
-    </p>
+          <div class="form-group">
+            <label asp-for="Project.Description">Описание курсового проекта: </label>
+            <input asp-for="Project.Description" class="form-control"/>
+            <span asp-validation-for="Project.Description" class="text-danger"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+        <div class="card-footer d-flex flex-column  justify-content-center">
+          <a class="btn btn-outline-primary" asp-controller="Files"
+             asp-action="UploadFile" asp-route-projectId="@Model.Project.Id">
+            Добавить файл
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    @{
+      var files = Model.FileModels;
+    }
+    <div class="mt-5 col-md-10 card card-body">
+      <h3>Все файлы:</h3>
+
+      @if (!files.Any())
+      {
+        <p>
+          К проекту не привязано файлов.
+          <a asp-controller="Files" asp-action="UploadFile"
+             asp-route-projectId="@Model.Project.Id">
+            Желаете добавить?
+          </a>
+        </p>
+      }
+      @for (var i = 0; i < files.Count; i++)
+      {
+        <input type="hidden" asp-for="@files[i]">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <a class="btn btn-outline-danger" asp-controller="Files"
+               asp-action="DeleteFile" asp-route-fileId="@files[i].Id">
+              Удалить
+            </a>
+            @files[i].Name
+          </li>
+        </ul>
+      }
+    </div>
   </div>
-</div>
-
-<a class="btn btn-link" asp-controller="Files" asp-action="UploadFile" asp-route-projectId="@Model.Project.Id">
-  Добавить файл
-</a>
-
-<h3>Все файлы</h3>
-@foreach (var f in Model.FileModels)
-{
-  <p>
-    <a class="btn btn-outline-danger" asp-controller="Files" asp-action="DeleteFile" asp-route-fileId="@f.Id">
-      Удалить
-    </a>
-    @f.Name --- @f.FilePath
-  </p>
-}
+</form>

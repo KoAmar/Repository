@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
@@ -37,7 +38,7 @@ namespace Repository.Controllers
                 return NotFound();
             }
 
-            var fileModels = _context.Files.Where(file => file.ProjectId == courseProject.Id);
+            var fileModels = _context.Files.Where(file => file.ProjectId == courseProject.Id).ToList();
 
             var projectAndFiles = new ProjectAndFilesViewModel()
             {
@@ -76,7 +77,7 @@ namespace Repository.Controllers
             if (courseProject == null) return NotFound();
 
             var fileModels = _context.Files
-                .Where(file => file.ProjectId == courseProject.Id);
+                .Where(file => file.ProjectId == courseProject.Id).ToList();
 
             var projectAndFiles = new ProjectAndFilesViewModel()
             {
@@ -86,12 +87,25 @@ namespace Repository.Controllers
 
             return View(projectAndFiles);
         }
-        
+
         //todo this method implementation 
         [HttpPost]
         public IActionResult EditProject(ProjectAndFilesViewModel projectAndFilesViewModel)
         {
-            return NotFound();
+            if (projectAndFilesViewModel == null) return NotFound();
+            if (!ModelState.IsValid) return View(projectAndFilesViewModel);
+
+            var newProject = projectAndFilesViewModel.Project;
+            var project = _context.CourseProjects.FindAsync(newProject.Id).Result;
+            if (project == null) return NotFound();
+
+            project.Title = newProject.Title;
+            project.Description = newProject.Description;
+
+            _context.CourseProjects.Update(project);
+            _context.SaveChangesAsync();
+
+            return RedirectToAction("EditProject", new {id = project.Id});
         }
 
         public IActionResult DeleteProject(string id)
@@ -119,6 +133,5 @@ namespace Repository.Controllers
                 return View("Message", errorMessage);
             }
         }
-        
     }
 }

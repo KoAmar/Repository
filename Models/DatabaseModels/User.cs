@@ -1,14 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Identity;
 
 namespace Repository.Models.DatabaseModels
 {
     public class User : IdentityUser
     {
+        [Required]
         public int Year { get; set; }
-        [NotNull]
+        [Required]
         public string FirstName { get; set; }
-        [NotNull]
+        [Required]
         public string Surname { get; set; }
         public string Patronymic { get; set; }
     }

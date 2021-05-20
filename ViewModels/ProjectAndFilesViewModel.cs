@@ -6,7 +6,7 @@ namespace Repository.ViewModels
 {
     public class ProjectAndFilesViewModel
     {
-        public CourseProject Project;
-        public IEnumerable<FileModel> FileModels;
+        public CourseProject Project { get; set; }
+        public List<FileModel> FileModels { get; set; }
     }
 }
