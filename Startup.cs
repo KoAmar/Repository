@@ -51,11 +51,12 @@ namespace Repository
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 app.UseHsts();
             }
 
@@ -66,7 +67,7 @@ namespace Repository
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            // app.UseStatusCodePagesWithReExecute("/error", "?code={0}");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Repository.Models;
 using Repository.Models.DatabaseModels;
 using Repository.ViewModels;
@@ -33,7 +34,7 @@ namespace Repository.Controllers
         {
             if (uploadedFile == null) return RedirectToAction("Index", "Projects");
 
-            var webRootPath = "files";
+            const string webRootPath = "files";
             var uniqueFileName = $"{Guid.NewGuid()}_{uploadedFile.FileName}";
             var projectFilePath = Path.Combine(webRootPath, uniqueFileName);
             var fullFilePath = Path.Combine(_appEnvironment.WebRootPath, projectFilePath);
@@ -52,6 +53,34 @@ namespace Repository.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("EditProject", "Projects", new {id = projectId});
+        }
+
+        public IActionResult TryDownloadFile(string fileId)
+        {
+            var file = _context.Files.FindAsync(fileId).Result;
+            if (file == null) return NotFound();
+            
+            var fileProvider = new FileExtensionContentTypeProvider();
+            
+            if (!fileProvider.TryGetContentType(file.Name, out string contentType))
+            {
+                View("Message",$"Unable to find Content Type for file name {file.Name}.");
+            }
+
+            return DownloadFile(fileId);
+        }
+
+        private VirtualFileResult DownloadFile(string fileId)
+        {
+            var file = _context.Files.FindAsync(fileId).Result;
+            var fileProvider = new FileExtensionContentTypeProvider();
+            
+            if (!fileProvider.TryGetContentType(file.Name, out string contentType))
+            {
+                throw new ArgumentOutOfRangeException($"Unable to find Content Type for file name {file.Name}.");
+            }
+
+            return File(file.FilePath, contentType, file.Name);
         }
     }
 }

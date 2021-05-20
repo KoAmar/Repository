@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,11 @@ namespace Repository.Controllers
         public IActionResult ProjectInfo(string id)
         {
             var courseProject = _courseProjects.GetCourseProject(id);
-            if (courseProject == null) return NotFound();
+            if (courseProject == null)
+            {
+                ;
+                return NotFound();
+            }
 
             var fileModels = _context.Files.Where(file => file.ProjectId == courseProject.Id);
 
@@ -83,14 +88,14 @@ namespace Repository.Controllers
 
             return View(projectAndFiles);
         }
-
+        
+        //todo this method implementation 
         [HttpPost]
         public IActionResult EditProject(ProjectAndFilesViewModel projectAndFilesViewModel)
         {
             return NotFound();
         }
 
-        // [HttpPost]
         public IActionResult DeleteProject(string id)
         {
             var project = _courseProjects.GetCourseProject(id);
@@ -116,5 +121,6 @@ namespace Repository.Controllers
                 return View("Message", errorMessage);
             }
         }
+        
     }
 }

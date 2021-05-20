@@ -26,6 +26,9 @@
 @foreach (var f in Model.FileModels)
 {
   <p>
+  <a class="btn btn-outline-info" asp-controller="Files" asp-action="TryDownloadFile" asp-route-fileId="@f.Id">
+    Скачать 
+  </a>
     @f.Name --- @f.FilePath
   </p>
 }
