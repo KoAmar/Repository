@@ -7,16 +7,19 @@
 @{
   ViewData["Title"] = "Редактирование страницы проекта";
 }
+<h2 >Редактирование страницы курсовго проекта</h2>
 
-<h2 >@_userManager.FindByIdAsync(Model.Project.UserId).Result.FirstName 
-  @_userManager.FindByIdAsync(Model.Project.UserId).Result.Surname</h2>
 <div class="card">
   <div class="card-body">
     <p >@Model.Project.Id</p>
     <p >@Model.Project.Title</p>
     <p >@Model.Project.Description</p>
     <p >@Model.Project.CreationDate</p>
-    <p >@Model.Project.UserId</p>
+    <p >
+      @_userManager.FindByIdAsync(Model.Project.UserId).Result.Surname
+      @_userManager.FindByIdAsync(Model.Project.UserId).Result.FirstName
+      @_userManager.FindByIdAsync(Model.Project.UserId).Result.Patronymic
+    </p>
   </div>
 </div>
 
@@ -28,6 +31,9 @@
 @foreach (var f in Model.FileModels)
 {
   <p>
+    <a class="btn btn-outline-danger" asp-controller="Files" asp-action="DeleteFile" asp-route-fileId="@f.Id">
+      Удалить
+    </a>
     @f.Name --- @f.FilePath
   </p>
 }
