@@ -54,7 +54,6 @@ namespace Repository.Controllers
             return View();
         }
 
-        [Authorize(Roles = "User")]
         [HttpPost]
         public IActionResult CreateProject(CourseProject courseProject)
         {
@@ -70,7 +69,6 @@ namespace Repository.Controllers
             return RedirectToAction("EditProject", courseProject.Id);
         }
 
-        [Authorize(Roles = "User")]
         [HttpGet]
         public IActionResult EditProject(string id)
         {
