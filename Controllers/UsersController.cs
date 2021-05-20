@@ -11,6 +11,7 @@ using Repository.ViewModels;
 
 namespace Repository.Controllers
 {
+    //todo uncomment
     // [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
@@ -83,7 +84,7 @@ namespace Repository.Controllers
             try
             {
                 await _userManager.DeleteAsync(user);
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
             }
             catch (SqlException e)
             {

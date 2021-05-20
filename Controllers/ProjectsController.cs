@@ -2,6 +2,8 @@
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Repository.Models;
 using Repository.Models.DatabaseInterfaces;
 using Repository.Models.DatabaseModels;
@@ -60,7 +62,7 @@ namespace Repository.Controllers
             courseProject.Id = Guid.NewGuid().ToString();
             _courseProjects.AddCourseProject(courseProject);
 
-            return RedirectToAction("EditProject",courseProject.Id);
+            return RedirectToAction("EditProject", courseProject.Id);
         }
 
         [Authorize(Roles = "User")]
@@ -86,6 +88,33 @@ namespace Repository.Controllers
         public IActionResult EditProject(ProjectAndFilesViewModel projectAndFilesViewModel)
         {
             return NotFound();
+        }
+
+        // [HttpPost]
+        public IActionResult DeleteProject(string id)
+        {
+            var project = _courseProjects.GetCourseProject(id);
+
+            if (project == null) return NotFound();
+
+            const string errorMessage = "Ошибка удалениия, вероятнее всего к этому курсовому проекту" +
+                                        " остались привязаны файлы или другая сущности.";
+
+            try
+            {
+                _courseProjects.DeleteCourseProject(id);
+                return RedirectToAction("Index");
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e);
+                return View("Message", errorMessage);
+            }
+            catch (DbUpdateException e)
+            {
+                Console.WriteLine(e);
+                return View("Message", errorMessage);
+            }
         }
     }
 }
