@@ -9,8 +9,8 @@
 }
 <h2 >Редактирование страницы курсовго проекта</h2>
 <form method="post">
-  <div class="row justify-content-center mt-3">
-    <div class="col-md-8 ">
+  <div class="row justify-content-center mt-3 mx-1">
+    <div class="col-md-8 mx-0">
       <div class="card">
         <div class="card-body">
           <div asp-validation-summary="All" class="text-danger mb-2"></div>
@@ -29,8 +29,17 @@
             <input asp-for="Project.Description" class="form-control"/>
             <span asp-validation-for="Project.Description" class="text-danger"></span>
           </div>
-
-          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+        <div class="card-footer d-flex flex-column  justify-content-center">
+          <button type="submit" class="btn btn-primary">
+            Сохранить
+          </button>
+        </div>
+        <div class="card-footer d-flex flex-column  justify-content-center">
+          <a class="btn btn-outline-secondary" asp-controller="Projects"
+             asp-action="ProjectInfo" asp-route-projectId="@Model.Project.Id">
+            Перейти в режим просмотра
+          </a>
         </div>
         <div class="card-footer d-flex flex-column  justify-content-center">
           <a class="btn btn-outline-primary" asp-controller="Files"

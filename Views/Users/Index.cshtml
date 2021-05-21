@@ -6,24 +6,32 @@
 
 <table class="table">
   <tr>
-    <th>Email</th><th>Год</th><th></th>
+    <th>Подтверждён</th><th>Email</th><th></th>
   </tr>
   @foreach (var user in Model)
   {
     <tr>
-      <td>@user.Email</td>
-      <td>@user.Year</td>
       <td>
-        <form asp-action="Delete" asp-route-id="@user.Id" method="post">
-          <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@user.Id">Изменить данные</a>
-          <a class="btn btn-outline-warning" 
-             asp-controller="Roles" asp-action="Edit" asp-route-userid="@user.Id">Права доступа</a>
-
-          <button type="submit" class="btn btn-danger">
-            Удалить
-          </button>
-        </form>
+        @if(user.EmailConfirmed){<p class="text-success">Да</p>}
+        else{<p class="text-danger">Нет</p>}
       </td>
+      <td>@user.Email</td>
+      <td>
+      <div class="row">
+        <div class="col-md-4">
+          <a class="btn btn-danger m-1" asp-action="Delete" asp-route-id="@user.Id">
+            Удалить
+          </a>
+        </div>  
+        <div class="col-md-4">
+          <a class="btn btn-outline-warning m-1" asp-action="Edit" asp-route-id="@user.Id">Изменить данные</a>
+        </div>
+        <div class="col-md-4">
+          <a class="btn btn-outline-warning m-1" asp-controller="Roles" asp-action="Edit" asp-route-userid="@user.Id">
+            Права доступа
+          </a>
+        </div>
+      </div>
     </tr>
   }
 </table>

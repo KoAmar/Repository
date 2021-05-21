@@ -51,7 +51,7 @@ namespace Repository
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+                // app.UseStatusCodePagesWithReExecute("/Error/{0}");
             }
             else
             {

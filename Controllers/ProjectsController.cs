@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,18 @@ namespace Repository.Controllers
     {
         private readonly IProjectsRepos _courseProjects;
         private readonly ApplicationDbContext _context;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
-        public ProjectsController(IProjectsRepos courseProjects, ApplicationDbContext context)
+        public ProjectsController(IProjectsRepos courseProjects,
+            ApplicationDbContext context,
+            SignInManager<User> signInManager,
+            UserManager<User> userManager)
         {
             _courseProjects = courseProjects;
             _context = context;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -58,16 +66,20 @@ namespace Repository.Controllers
         [HttpPost]
         public IActionResult CreateProject(CourseProject courseProject)
         {
+            if (!_signInManager.IsSignedIn(User))
+                return RedirectToAction("Login", "Account", new {returnUrl = Request.Path.Value});
+
             if (courseProject == null) return RedirectToAction("Index");
+            courseProject.UserId = _userManager.GetUserId(User);
             if (!ModelState.IsValid) return View(courseProject);
 
-            courseProject.UserId = "5a73781f-2288-4d04-a36a-99702716cefb";
 
             courseProject.CreationDate = DateTime.Now;
             courseProject.Id = Guid.NewGuid().ToString();
+
             _courseProjects.AddCourseProject(courseProject);
 
-            return RedirectToAction("EditProject", courseProject.Id);
+            return RedirectToAction("EditProject", new {courseProject.Id});
         }
 
         [HttpGet]
@@ -88,7 +100,6 @@ namespace Repository.Controllers
             return View(projectAndFiles);
         }
 
-        //todo this method implementation 
         [HttpPost]
         public IActionResult EditProject(ProjectAndFilesViewModel projectAndFilesViewModel)
         {

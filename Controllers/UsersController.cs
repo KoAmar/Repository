@@ -73,7 +73,7 @@ namespace Repository.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        // [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {
             var user = await _userManager.FindByIdAsync(id);

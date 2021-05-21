@@ -37,7 +37,6 @@ namespace Repository.Controllers
                 return View(model);
             }
 
-
             var user = new User
             {
                 Email = model.Email,

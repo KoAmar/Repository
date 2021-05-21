@@ -12,7 +12,6 @@ namespace Repository.Models.DatabaseModels
         [Required]
         public DateTime CreationDate { get; set; }
         [MaxLength(450)]
-        [Required]
         public string UserId { get; set; }
         [Required(ErrorMessage = "Требуется название!")]
         public string Title { get; set; }

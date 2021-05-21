@@ -6,7 +6,7 @@
 @{
   ViewData["Title"] = "Страница проекта";
 }
-
+@*todo update design *@
 <h2 >Страница курсовго проекта</h2>
 
 <div class="card">
@@ -15,6 +15,7 @@
     <p >@Model.Project.Title</p>
     <p >@Model.Project.Description</p>
     <p >@Model.Project.CreationDate</p>
+    <p >@_userManager.FindByIdAsync(Model.Project.UserId).Result.Email</p>
     <p >
       @_userManager.FindByIdAsync(Model.Project.UserId).Result.Surname
       @_userManager.FindByIdAsync(Model.Project.UserId).Result.FirstName
@@ -22,7 +23,7 @@
     </p>
   </div>
 </div>
-
+@* todo add edit button for creator *@
 <h3>Все файлы</h3>
 @foreach (var f in Model.FileModels)
 {
