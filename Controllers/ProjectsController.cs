@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace Repository.Controllers
 {
     public class ProjectsController : Controller
     {
+        
+
         private readonly IProjectsRepos _courseProjects;
         private readonly ApplicationDbContext _context;
         private readonly SignInManager<User> _signInManager;
@@ -32,19 +35,33 @@ namespace Repository.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(IndexProjectViewModel.Sort sort, int pageId = 1)
         {
-            return View(_courseProjects.GetAllCourseProjects());
+            var projects = _courseProjects.GetAllCourseProjects().ToList();
+
+            IEnumerable<CourseProject> sortedProjects = sort switch
+            {
+                IndexProjectViewModel.Sort.Date => projects.OrderByDescending(p => p.CreationDate),
+                IndexProjectViewModel.Sort.ReverseDate => projects.OrderBy(p => p.CreationDate),
+                IndexProjectViewModel.Sort.Name => projects.OrderBy(p => p.Title),
+                IndexProjectViewModel.Sort.ReverseName => projects.OrderByDescending(p => p.Title),
+                _ => projects
+            };
+
+            var indexProjectViewModel = new IndexProjectViewModel
+            {  
+                ProjectsPerPage = 5,  
+                Projects = sortedProjects,
+                SortBy = sort,
+                CurrentPage = pageId
+            };  
+            return View(indexProjectViewModel);  
         }
 
         public IActionResult ProjectInfo(string id)
         {
             var courseProject = _courseProjects.GetCourseProject(id);
-            if (courseProject == null)
-            {
-                ;
-                return NotFound();
-            }
+            if (courseProject == null) return NotFound();
 
             var fileModels = _context.Files.Where(file => file.ProjectId == courseProject.Id).ToList();
 
