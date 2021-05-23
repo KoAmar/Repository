@@ -11,7 +11,7 @@
 <header>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
-      <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Repository</a>
+      <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Репозиторий</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
               aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -19,24 +19,55 @@
       <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
         <ul class="navbar-nav flex-grow-1">
           <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
           </li>
-
-          <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
-          </li>
-          @* <li class="nav-item"> *@
-          @*   <a class="nav-link text-dark" asp-area="" asp-controller="Files" asp-action="Index">Files</a> *@
-          @* </li> *@
-          <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-          </li>
+          @{
+            System.Diagnostics.Debug.Assert(User.Identity != null, "User.Identity != null");
+          }
+          @if (User.Identity.IsAuthenticated)
+          {
+            <li class="nav-item">
+              <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="MyProjects">Мои проекты</a>
+            </li>
+            @if (User.IsInRole("Admin"))
+            {
+              <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Роли</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Пользоватли</a>
+              </li>
+            }
+          }
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          @{
+            System.Diagnostics.Debug.Assert(User.Identity != null, "User.Identity != null");
+          }
+          @if (User.Identity.IsAuthenticated)
+          {
+            <li class="nav-item">
+              <form method="post" asp-controller="account" asp-action="logout">
+                <button type="submit" style="width:auto"
+                        class="nav-link btn btn-link py-0">
+                  Выйти из @User.Identity.Name
+                </button>
+              </form>
+            </li>
+          }
+          else
+          {
+            <li class="nav-item">
+              <a class="nav-link" asp-controller="account" asp-action="register">
+                Регитрация
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" asp-controller="account" asp-action="login">
+                Логин
+              </a>
+            </li>
+          }
         </ul>
       </div>
     </div>
@@ -50,7 +81,7 @@
 
 <footer class="border-top footer text-muted">
   <div class="container">
-    &copy; 2021 - Repository - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    &copy; 2021 - Repository ©Pavel Halavanau
   </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

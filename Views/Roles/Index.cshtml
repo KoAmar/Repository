@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
- 
-<h2>Список ролей</h2>
+ @{
+   ViewData["Title"] = "Список ролей";
+ }
+<h1>Список ролей</h1>
 <table class="table">
     @foreach (var role in Model)
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -11,8 +12,7 @@ using Repository.ViewModels;
 
 namespace Repository.Controllers
 {
-    //todo uncomment
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -33,7 +33,7 @@ namespace Repository.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
-            var model = new RegisterViewModel
+            var model = new EditUserViewModel
             {
                 Id = user.Id,
                 Email = user.Email,
@@ -46,7 +46,8 @@ namespace Repository.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(RegisterViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -59,21 +60,29 @@ namespace Repository.Controllers
 
             user.Email = model.Email;
             user.UserName = model.Email;
+            user.Surname = model.Surname;
+            user.FirstName = model.FirstName;
+            user.Patronymic = model.Patronymic;
             user.Year = model.Year;
-
-            if (HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) is IPasswordHasher<User>
-                passwordHasher)
-                user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
-
+            
+            if (model.Password!=null)
+            {
+                if (HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) is IPasswordHasher<User>
+                    passwordHasher)
+                    user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
+            }
 
             var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded) return RedirectToAction("Index");
+            if (result.Succeeded)
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
 
             foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
             return View(model);
         }
 
-        // [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {
             var user = await _userManager.FindByIdAsync(id);

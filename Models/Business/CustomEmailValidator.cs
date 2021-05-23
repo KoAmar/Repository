@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -25,14 +26,18 @@ namespace Repository.Models.Business
                     Description = "Ник пользователя не должен содержать слово 'admin'"
                 });
 
-            var regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-            var match = regex.Match(email);
-            if (!match.Success)
+            try
+            {
+                var m = new MailAddress(email);
+            }
+            catch (FormatException)
+            {
                 errors.Add(new IdentityError
                 {
                     Description = "Некорректный формат email"
                 });
-
+            }
+            
             return Task.FromResult(errors.Count == 0
                 ? IdentityResult.Success
                 : IdentityResult.Failed(errors.ToArray()));

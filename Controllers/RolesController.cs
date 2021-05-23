@@ -10,8 +10,7 @@ using Repository.ViewModels;
 
 namespace Repository.Controllers
 {
-  //todo uncomment 
-  // [Authorize(Roles = "Admin")]
+  [Authorize(Roles = "Admin")]
   public class RolesController : Controller
   {
     private readonly RoleManager<IdentityRole> _roleManager;
@@ -79,6 +78,7 @@ namespace Repository.Controllers
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(string userId, List<string> roles)
     {
       // получаем пользователя

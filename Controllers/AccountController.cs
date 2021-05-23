@@ -27,6 +27,7 @@ namespace Repository.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -76,7 +77,6 @@ namespace Repository.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -91,9 +91,10 @@ namespace Repository.Controllers
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            if (result.Succeeded)
-                return RedirectToAction("Index", "Home");
-            return View("Error");
+            if (!result.Succeeded) return View("Error");
+            
+            await _userManager.AddToRoleAsync(user,"User");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -133,14 +134,12 @@ namespace Repository.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
@@ -177,7 +176,6 @@ namespace Repository.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
@@ -208,6 +206,7 @@ namespace Repository.Controllers
 
         // [HttpGet]
         // [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

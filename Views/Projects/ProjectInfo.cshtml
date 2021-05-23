@@ -7,7 +7,6 @@
   ViewData["Title"] = "Страница проекта";
   var user = _userManager.FindByIdAsync(Model.Project.UserId).Result;
 }
-@*todo update design *@
 <h2 >Страница курсовго проекта</h2>
 <div class="row justify-content-center mt-3 mx-1">
   <div class="col-md-8 mx-0">
@@ -22,18 +21,20 @@
         </p>
       </div>
       <div class="card-footer d-flex flex-column  justify-content-center">
-
-        <a class="btn btn-outline-primary my-1" asp-controller="Projects"
-           asp-action="EditProject" asp-route-id="@Model.Project.Id">
-          Редактировать
-        </a>
-        <a class="btn btn-outline-danger my-1" asp-controller="Projects"
-           asp-action="DeleteProject" asp-route-id="@Model.Project.Id">
-          Удалить
-        </a>
+        @if (Model.Project.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+        {
+          <a class="btn btn-outline-primary my-1" asp-controller="Projects"
+             asp-action="EditProject" asp-route-id="@Model.Project.Id">
+            Редактировать
+          </a>
+          <a class="btn btn-outline-danger my-1" asp-controller="Projects"
+             asp-action="DeleteProject" asp-route-id="@Model.Project.Id">
+            Удалить
+          </a>
+        }
       </div>
     </div>
-    
+
     <div class="mt-3 card card-body">
       <h3>Все файлы:</h3>
       @if (!Model.FileModels.Any())

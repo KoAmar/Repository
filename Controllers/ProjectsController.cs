@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Bcpg.Sig;
 using Repository.Models;
 using Repository.Models.DatabaseInterfaces;
 using Repository.Models.DatabaseModels;
@@ -15,10 +16,9 @@ using Repository.ViewModels;
 
 namespace Repository.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
-        
-
         private readonly IProjectsRepos _courseProjects;
         private readonly ApplicationDbContext _context;
         private readonly SignInManager<User> _signInManager;
@@ -35,6 +35,7 @@ namespace Repository.Controllers
             _userManager = userManager;
         }
 
+        [AllowAnonymous]
         public IActionResult Index(IndexProjectViewModel.Sort sort, int pageId = 1)
         {
             var projects = _courseProjects.GetAllCourseProjects().ToList();
@@ -49,15 +50,16 @@ namespace Repository.Controllers
             };
 
             var indexProjectViewModel = new IndexProjectViewModel
-            {  
-                ProjectsPerPage = 5,  
+            {
+                ProjectsPerPage = 5,
                 Projects = sortedProjects,
                 SortBy = sort,
                 CurrentPage = pageId
-            };  
-            return View(indexProjectViewModel);  
+            };
+            return View(indexProjectViewModel);
         }
 
+        [AllowAnonymous]
         public IActionResult ProjectInfo(string id)
         {
             var courseProject = _courseProjects.GetCourseProject(id);
@@ -81,10 +83,11 @@ namespace Repository.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult CreateProject(CourseProject courseProject)
         {
-            if (!_signInManager.IsSignedIn(User))
-                return RedirectToAction("Login", "Account", new {returnUrl = Request.Path.Value});
+            // if (!_signInManager.IsSignedIn(User))
+            //     return RedirectToAction("Login", "Account", new {returnUrl = Request.Path.Value});
 
             if (courseProject == null) return RedirectToAction("Index");
             courseProject.UserId = _userManager.GetUserId(User);
@@ -102,8 +105,16 @@ namespace Repository.Controllers
         [HttpGet]
         public IActionResult EditProject(string id)
         {
+            if (!_signInManager.IsSignedIn(User))
+                return RedirectToAction("Login", "Account", new {returnUrl = Request.Path.Value});
+
             var courseProject = _courseProjects.GetCourseProject(id);
             if (courseProject == null) return NotFound();
+
+            if (courseProject.UserId != _userManager.GetUserId(User) && !User.IsInRole("Admin"))
+            {
+                return View("Message", "У вас нет прав для редактирования!");
+            }
 
             var fileModels = _context.Files
                 .Where(file => file.ProjectId == courseProject.Id).ToList();
@@ -118,6 +129,7 @@ namespace Repository.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult EditProject(ProjectAndFilesViewModel projectAndFilesViewModel)
         {
             if (projectAndFilesViewModel == null) return NotFound();
@@ -127,6 +139,12 @@ namespace Repository.Controllers
             var project = _context.CourseProjects.FindAsync(newProject.Id).Result;
             if (project == null) return NotFound();
 
+            
+            if (project.UserId != _userManager.GetUserId(User) && !User.IsInRole("Admin"))
+            {
+                return View("Message", "У вас нет прав для редактирования!");
+            }
+            
             project.Title = newProject.Title;
             project.Description = newProject.Description;
 
@@ -140,8 +158,14 @@ namespace Repository.Controllers
         {
             var project = _courseProjects.GetCourseProject(id);
 
+            
             if (project == null) return NotFound();
 
+            if (project.UserId != _userManager.GetUserId(User) && !User.IsInRole("Admin"))
+            {
+                return View("Message", "У вас нет прав для удаления!");
+            }
+            
             const string errorMessage = "Ошибка удалениия, вероятнее всего к этому курсовому проекту" +
                                         " остались привязаны файлы или другая сущности.";
 
@@ -160,6 +184,14 @@ namespace Repository.Controllers
                 Console.WriteLine(e);
                 return View("Message", errorMessage);
             }
+        }
+
+        public IActionResult MyProjects()
+        {
+            return View(_courseProjects.GetAllCourseProjects()
+                .Where(p => p.UserId == _userManager.GetUserId(User))
+                .OrderByDescending(p => p.CreationDate)
+            );
         }
     }
 }

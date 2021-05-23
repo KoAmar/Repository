@@ -16,30 +16,21 @@ namespace Repository.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index","Projects");
+            // return View();
         }
 
-        public IActionResult Privacy()
-        {           
-            return View();
-        }
         
-        [Route("Error/{statusCode}")]
+        [Route("Error/{statusCode:int}")]
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
-            switch (statusCode)
+            ViewBag.ErrorMessage = statusCode switch
             {
-                case 404:
-                    ViewBag.ErrorMessage = "Извините, запрашиваемый ресурс не может быть найден";
-                    break;
-                default:
-                    ViewBag.ErrorMessage = $"Ошибка {statusCode}";
-                    break;
-                
-            }
+                404 => "Извините, запрашиваемый ресурс не может быть найден",
+                _ => $"Ошибка {statusCode}"
+            };
 
             return View("NotFound");
-
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,0 +1,65 @@
+﻿@model System.Linq.IOrderedEnumerable<Repository.Models.DatabaseModels.CourseProject>
+
+@using Repository.Models.DatabaseModels
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> _userManager
+
+@{
+  ViewBag.Title = "Мои проекты";
+}
+
+<h1 >Список моих курсовых проектов</h1>
+<div class="row justify-content-center ">
+
+  <div class="mt-3 col-md-8 d-flex flex-column  justify-content-center">
+
+
+    @if (!Model.Any())
+    {
+      <div class="text-center">
+        <h3 class="text-muted my-5">Не найдено проектов созданных вами =(</h3>
+        <h1 class="my-5"> </h1>
+      </div>
+    }
+    else
+    {
+      <a class="btn btn-outline-secondary  my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
+    }
+
+    @foreach (var project in Model)
+    {
+      <div class="card my-3">
+        <div class="card-header d-flex justify-content-between bg-light">
+          <h3 class="card-title">@project.Title</h3>
+          <h6 class="card-title text-muted">
+            @_userManager.FindByIdAsync(project.UserId).Result.Email в @project.CreationDate
+          </h6>
+        </div>
+        <div class="card-body bg-light">
+          <p class="card-text">@project.Description</p>
+        </div>
+
+        <div class="card-footer d-flex flex-column flex-sm-row justify-content-around bg-light">
+          <a class="my-1 btn btn-secondary" asp-controller="Projects" asp-action="ProjectInfo"
+             asp-route-id="@project.Id">
+            Открыть
+          </a>
+          @if (project.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+          {
+            <a class="my-1 btn btn-secondary" asp-controller="Projects" asp-action="EditProject"
+               asp-route-id="@project.Id">
+              Редактировать
+            </a>
+            <a class="my-1 btn btn-danger" asp-controller="Projects" asp-action="DeleteProject"
+               asp-route-id="@project.Id">
+              Удалить
+            </a>
+          }
+        </div>
+      </div>
+    }
+
+    <a class="btn btn-outline-secondary my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
+
+  </div>
+</div>
