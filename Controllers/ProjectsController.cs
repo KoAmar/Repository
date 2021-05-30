@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Bcpg.Sig;
 using Repository.Models;
 using Repository.Models.DatabaseInterfaces;
 using Repository.Models.DatabaseModels;
@@ -19,8 +16,8 @@ namespace Repository.Controllers
     [Authorize]
     public class ProjectsController : Controller
     {
-        private readonly IProjectsRepos _courseProjects;
         private readonly ApplicationDbContext _context;
+        private readonly IProjectsRepos _courseProjects;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
 
@@ -67,7 +64,7 @@ namespace Repository.Controllers
 
             var fileModels = _context.Files.Where(file => file.ProjectId == courseProject.Id).ToList();
 
-            var projectAndFiles = new ProjectAndFilesViewModel()
+            var projectAndFiles = new ProjectAndFilesViewModel
             {
                 Project = courseProject,
                 FileModels = fileModels
@@ -112,14 +109,12 @@ namespace Repository.Controllers
             if (courseProject == null) return NotFound();
 
             if (courseProject.UserId != _userManager.GetUserId(User) && !User.IsInRole("Admin"))
-            {
                 return View("Message", "У вас нет прав для редактирования!");
-            }
 
             var fileModels = _context.Files
                 .Where(file => file.ProjectId == courseProject.Id).ToList();
 
-            var projectAndFiles = new ProjectAndFilesViewModel()
+            var projectAndFiles = new ProjectAndFilesViewModel
             {
                 Project = courseProject,
                 FileModels = fileModels
@@ -139,12 +134,10 @@ namespace Repository.Controllers
             var project = _context.CourseProjects.FindAsync(newProject.Id).Result;
             if (project == null) return NotFound();
 
-            
+
             if (project.UserId != _userManager.GetUserId(User) && !User.IsInRole("Admin"))
-            {
                 return View("Message", "У вас нет прав для редактирования!");
-            }
-            
+
             project.Title = newProject.Title;
             project.Description = newProject.Description;
 
@@ -158,14 +151,12 @@ namespace Repository.Controllers
         {
             var project = _courseProjects.GetCourseProject(id);
 
-            
+
             if (project == null) return NotFound();
 
             if (project.UserId != _userManager.GetUserId(User) && !User.IsInRole("Admin"))
-            {
                 return View("Message", "У вас нет прав для удаления!");
-            }
-            
+
             const string errorMessage = "Ошибка удалениия, вероятнее всего к этому курсовому проекту" +
                                         " остались привязаны файлы или другая сущности.";
 

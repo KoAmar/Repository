@@ -11,8 +11,8 @@ namespace Repository.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
@@ -57,7 +57,7 @@ namespace Repository.Controllers
                     "ConfirmEmail",
                     "Account",
                     new {userId = user.Id, code},
-                    protocol: HttpContext.Request.Scheme);
+                    HttpContext.Request.Scheme);
                 var emailService = new EmailService();
 
                 await emailService.SendEmailAsync(model.Email, "Confirm your account",
@@ -68,10 +68,7 @@ namespace Repository.Controllers
                 return View("Message", message);
             }
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+            foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
 
             return View(model);
         }
@@ -79,21 +76,15 @@ namespace Repository.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null)
-            {
-                return View("Error");
-            }
+            if (userId == null || code == null) return View("Error");
 
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return View("Error");
-            }
+            if (user == null) return View("Error");
 
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded) return View("Error");
-            
-            await _userManager.AddToRoleAsync(user,"User");
+
+            await _userManager.AddToRoleAsync(user, "User");
             return RedirectToAction("Index", "Home");
         }
 
@@ -110,14 +101,12 @@ namespace Repository.Controllers
             if (!ModelState.IsValid) return View(model);
             var user = await _userManager.FindByNameAsync(model.Email);
             if (user != null)
-            {
                 // проверяем, подтвержден ли email
                 if (!await _userManager.IsEmailConfirmedAsync(user))
                 {
                     ModelState.AddModelError(string.Empty, "Вы не подтвердили свой email");
                     return View(model);
                 }
-            }
 
             var result =
                 await _signInManager.PasswordSignInAsync
@@ -144,15 +133,13 @@ namespace Repository.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            
+
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-            {
+            if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
                 // пользователь с данным email может отсутствовать в бд
                 // тем не менее мы выводим стандартное сообщение, чтобы скрыть 
                 // наличие или отсутствие пользователя в бд
                 return View("ForgotPasswordConfirmation");
-            }
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             var callbackUrl = Url.Action(
@@ -165,7 +152,6 @@ namespace Repository.Controllers
             await emailService.SendEmailAsync(model.Email, "Reset Password",
                 $"Для сброса пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
             return View("ForgotPasswordConfirmation");
-
         }
 
         [HttpGet]
@@ -179,27 +165,15 @@ namespace Repository.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                return View("ResetPasswordConfirmation");
-            }
+            if (user == null) return View("ResetPasswordConfirmation");
 
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return View("ResetPasswordConfirmation");
-            }
+            if (result.Succeeded) return View("ResetPasswordConfirmation");
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+            foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
 
             return View(model);
         }

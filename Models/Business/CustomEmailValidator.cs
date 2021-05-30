@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Mail;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Repository.Models.DatabaseModels;
@@ -37,7 +36,7 @@ namespace Repository.Models.Business
                     Description = "Некорректный формат email"
                 });
             }
-            
+
             return Task.FromResult(errors.Count == 0
                 ? IdentityResult.Success
                 : IdentityResult.Failed(errors.ToArray()));

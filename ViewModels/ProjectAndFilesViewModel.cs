@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Repository.Models.DatabaseModels;
 
 namespace Repository.ViewModels

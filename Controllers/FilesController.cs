@@ -14,8 +14,8 @@ namespace Repository.Controllers
 {
     public class FilesController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _appEnvironment;
+        private readonly ApplicationDbContext _context;
 
         public FilesController(ApplicationDbContext context, IWebHostEnvironment appEnvironment)
         {
@@ -63,10 +63,8 @@ namespace Repository.Controllers
 
             var fileProvider = new FileExtensionContentTypeProvider();
 
-            if (!fileProvider.TryGetContentType(file.Name, out string contentType))
-            {
+            if (!fileProvider.TryGetContentType(file.Name, out var contentType))
                 View("Message", $"Unable to find Content Type for file name {file.Name}.");
-            }
 
             return DownloadFile(fileId);
         }
@@ -76,10 +74,8 @@ namespace Repository.Controllers
             var file = _context.Files.FindAsync(fileId).Result;
             var fileProvider = new FileExtensionContentTypeProvider();
 
-            if (!fileProvider.TryGetContentType(file.Name, out string contentType))
-            {
+            if (!fileProvider.TryGetContentType(file.Name, out var contentType))
                 throw new ArgumentOutOfRangeException($"Unable to find Content Type for file name {file.Name}.");
-            }
 
             return File(file.FilePath, contentType, file.Name);
         }
@@ -91,10 +87,7 @@ namespace Repository.Controllers
 
             var fullFilePath = Path.Combine(_appEnvironment.WebRootPath, file.FilePath);
 
-            if (System.IO.File.Exists(fullFilePath))
-            {
-                System.IO.File.Delete(fullFilePath);
-            }
+            if (System.IO.File.Exists(fullFilePath)) System.IO.File.Delete(fullFilePath);
 
             var projectId = file.ProjectId;
             var project = _context.CourseProjects.FindAsync(projectId).Result;

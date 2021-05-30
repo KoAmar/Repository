@@ -1,18 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Repository.Models.DatabaseModels
 {
-    public class FileModel 
+    public class FileModel
     {
-        [MaxLength(450)]
-        [Required]
-        public string Id { get; set; }
+        [MaxLength(450)] [Required] public string Id { get; set; }
+
         public string Name { get; set; }
-        [Required]
-        public string FilePath { get; set; }
-        [Required]
-        [MaxLength(450)]
-        public string ProjectId { get; set; }
+
+        [Required] public string FilePath { get; set; }
+
+        [Required] [MaxLength(450)] public string ProjectId { get; set; }
     }
 }

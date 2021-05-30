@@ -27,10 +27,7 @@ namespace Repository.Models.DatabaseInterfaces.Implementations
         {
             var project = _context.CourseProjects.Find(id);
 
-            if (project == null)
-            {
-                return null;
-            }
+            if (project == null) return null;
 
             _context.Remove(project);
             _context.SaveChanges();

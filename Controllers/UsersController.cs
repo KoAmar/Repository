@@ -15,8 +15,8 @@ namespace Repository.Controllers
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
-        private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
         public UsersController(UserManager<User> userManager, ApplicationDbContext context)
         {
@@ -64,13 +64,11 @@ namespace Repository.Controllers
             user.FirstName = model.FirstName;
             user.Patronymic = model.Patronymic;
             user.Year = model.Year;
-            
-            if (model.Password!=null)
-            {
+
+            if (model.Password != null)
                 if (HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) is IPasswordHasher<User>
                     passwordHasher)
                     user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
-            }
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -87,13 +85,13 @@ namespace Repository.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
-            
+
             const string errorMessage = "Ошибка удалениия, вероятнее всего к этому" +
                                         " пользователю приявязан проект или другая сущность.";
             try
             {
                 await _userManager.DeleteAsync(user);
-                    return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
             catch (SqlException e)
             {

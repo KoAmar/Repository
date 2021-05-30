@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Diagnostics
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -22,7 +23,7 @@
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
           </li>
           @{
-            System.Diagnostics.Debug.Assert(User.Identity != null, "User.Identity != null");
+            Debug.Assert(User.Identity != null, "User.Identity != null");
           }
           @if (User.Identity.IsAuthenticated)
           {
@@ -42,7 +43,7 @@
         </ul>
         <ul class="navbar-nav ml-auto">
           @{
-            System.Diagnostics.Debug.Assert(User.Identity != null, "User.Identity != null");
+            Debug.Assert(User.Identity != null, "User.Identity != null");
           }
           @if (User.Identity.IsAuthenticated)
           {

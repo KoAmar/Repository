@@ -12,8 +12,16 @@
   {
     <tr>
       <td>
-        @if(user.EmailConfirmed){<p class="text-success">Да</p>}
-        else{<p class="text-danger">Нет</p>}
+        @if (user.EmailConfirmed)
+        {
+          
+        <p class="text-success">Да</p>
+        }
+        else
+        {
+          
+        <p class="text-danger">Нет</p>
+        }
       </td>
       <td>@user.Email</td>
       <td>
@@ -22,7 +30,7 @@
           <a class="btn btn-danger m-1" asp-action="Delete" asp-route-id="@user.Id">
             Удалить
           </a>
-        </div>  
+        </div>
         <div class="col-md-4">
           <a class="btn btn-outline-warning m-1" asp-action="Edit" asp-route-id="@user.Id">Изменить данные</a>
         </div>

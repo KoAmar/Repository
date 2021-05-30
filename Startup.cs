@@ -38,7 +38,7 @@ namespace Repository
                     opts.Password.RequireLowercase = true; // требуются ли символы в нижнем регистре
                     opts.Password.RequireUppercase = true; // требуются ли символы в верхнем регистре
                     opts.Password.RequireDigit = true; // требуются ли цифры
-                    
+
                     opts.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()

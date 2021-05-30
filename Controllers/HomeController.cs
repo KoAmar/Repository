@@ -16,11 +16,11 @@ namespace Repository.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index","Projects");
+            return RedirectToAction("Index", "Projects");
             // return View();
         }
 
-        
+
         [Route("Error/{statusCode:int}")]
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
@@ -32,6 +32,7 @@ namespace Repository.Controllers
 
             return View("NotFound");
         }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

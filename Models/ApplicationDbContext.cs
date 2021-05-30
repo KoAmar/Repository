@@ -12,8 +12,9 @@ namespace Repository.Models
             // CourseProjects = courseProjects;
             // Database.EnsureCreated();
         }
-        
+
         public DbSet<CourseProject> CourseProjects { get; set; }
+
         public DbSet<FileModel> Files { get; set; }
         //
         // protected override void OnModelCreating(ModelBuilder modelBuilder)
