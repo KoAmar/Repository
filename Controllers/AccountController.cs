@@ -99,7 +99,7 @@ namespace Repository.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = await _userManager.FindByNameAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
                 // проверяем, подтвержден ли email
                 if (!await _userManager.IsEmailConfirmedAsync(user))

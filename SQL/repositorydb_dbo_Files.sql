@@ -1,0 +1,6 @@
+INSERT INTO repositorydb2.dbo.Files (Id, ProjectId, FilePath, Name) VALUES (N'b88a77a4-daed-4d05-a83f-45a7a3112ad5', N'1', N'files\0deba190-9e1f-4db5-b5e9-e5df7fb45d49_S3.jpg', N'S3.jpg');
+INSERT INTO repositorydb2.dbo.Files (Id, ProjectId, FilePath, Name) VALUES (N'1114b309-6552-4896-9d7a-bf29104fd977', N'1', N'files\f3321ff6-ca92-4351-825d-9674a8c7960c_aspnetcore-developer-roadmap.png', N'aspnetcore-developer-roadmap.png');
+INSERT INTO repositorydb2.dbo.Files (Id, ProjectId, FilePath, Name) VALUES (N'f73e0c1b-952f-42b0-a060-075d2fdbb783', N'08e3b5a6-9cbc-418e-a56b-24cdcb33f3a3', N'files\af908cd0-7fd9-4473-a448-670ecbe36d6f_1S.jpg', N'1S.jpg');
+INSERT INTO repositorydb2.dbo.Files (Id, ProjectId, FilePath, Name) VALUES (N'deaa1f8a-cf3e-4b56-b39e-13882606b824', N'fca4832e-068f-47bb-ac83-57a281ad882a', N'files\26cf5109-d1cb-43ed-83ca-471feae89102_1S.jpg', N'1S.jpg');
+INSERT INTO repositorydb2.dbo.Files (Id, ProjectId, FilePath, Name) VALUES (N'0803398f-62a9-46d9-8dd3-83a4c2f7da33', N'5f5cc998-ab73-48f8-a7b8-05f2c51ea512', N'files\cb33cac1-11a4-4a72-aec9-50978ae3f758_1S.jpg', N'1S.jpg');
+INSERT INTO repositorydb2.dbo.Files (Id, ProjectId, FilePath, Name) VALUES (N'1d51116a-43d4-4116-b4ee-bb01596e256c', N'509f9518-88cc-4483-ade5-d37059a5d129', N'files\b5d7e2e5-fda9-4494-81ad-fc044658e2c2_repository.png', N'repository.png');

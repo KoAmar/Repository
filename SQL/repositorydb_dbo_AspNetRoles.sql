@@ -1,0 +1,3 @@
+INSERT INTO repositorydb2.dbo.AspNetRoles (Id, Name, NormalizedName, ConcurrencyStamp) VALUES (N'0cf40a36-9369-4c72-b3cb-a2f853bdccc9', N'Admin', N'ADMIN', N'3917213d-0d28-412b-bcdf-cb82df5de401');
+INSERT INTO repositorydb2.dbo.AspNetRoles (Id, Name, NormalizedName, ConcurrencyStamp) VALUES (N'5d2a1063-9b78-4deb-90e1-6c1d91185cf5', N'User', N'USER', N'c3456500-f527-498b-be54-e1bf86698448');
+INSERT INTO repositorydb2.dbo.AspNetRoles (Id, Name, NormalizedName, ConcurrencyStamp) VALUES (N'a3323007-6c20-45ec-9147-a93cb6ae70d7', N'Pavlik', N'PAVLIK', N'4ee22744-abe3-4b8c-8c24-8370daad160a');

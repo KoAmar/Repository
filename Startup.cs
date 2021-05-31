@@ -28,7 +28,7 @@ namespace Repository
             services.AddControllersWithViews();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration
-                    .GetConnectionString("DefaultConnection")));
+                    .GetConnectionString("DefaultConnection2")));
 
             services.AddTransient<IUserValidator<User>, CustomEmailValidator>();
             services.AddScoped<IProjectsRepos, CourseProjRepos>();
