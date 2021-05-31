@@ -5,8 +5,6 @@ namespace Repository.Models.DatabaseModels
 {
     public class CourseProject
     {
-        // [Key]
-
         public string Id { get; set; }
 
         [Required] public DateTime CreationDate { get; set; }

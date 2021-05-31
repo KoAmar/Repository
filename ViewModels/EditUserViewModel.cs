@@ -35,7 +35,7 @@ namespace Repository.ViewModels
         {
             if (Year < MinValidYear || Year > DateTime.Now.Year)
                 yield return new ValidationResult(
-                    $"Classic movies must have a release year no later than {MinValidYear}.",
+                    $"Ошибка года рождения \"{MinValidYear}\".",
                     new[] {nameof(Year)});
         }
     }

@@ -85,7 +85,7 @@ namespace Repository.Controllers
             if (!result.Succeeded) return View("Error");
 
             await _userManager.AddToRoleAsync(user, "User");
-            return RedirectToAction("Index", "Home");
+            return View("Message", "Ваша почта подтверждена, теперь вы можете войти, используя её.");
         }
 
         [HttpGet]
@@ -156,9 +156,21 @@ namespace Repository.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
+        public IActionResult ResetPassword(string code = null, string userId = null)
         {
-            return code == null ? View("Error") : View();
+            if (userId == null || code == null) return View("Message", "Неверная ссылка.");
+
+            var user =_userManager.FindByIdAsync(userId);
+
+            if (user == null) return View("Message", "Неверная ссылка.");
+
+            var model = new ResetPasswordViewModel()
+            {
+                Code = code,
+                UserId = userId
+            };
+            
+            return View(model);
         }
 
         [HttpPost]
@@ -167,7 +179,7 @@ namespace Repository.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByIdAsync(model.UserId);
             if (user == null) return View("ResetPasswordConfirmation");
 
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);

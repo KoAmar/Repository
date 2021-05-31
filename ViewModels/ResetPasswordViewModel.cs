@@ -4,7 +4,7 @@ namespace Repository.ViewModels
 {
     public class ResetPasswordViewModel
     {
-        [Required] [EmailAddress] public string Email { get; set; }
+        // [Required] [EmailAddress] public string Email { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "Пароль должен содержать как минимум 8 символов", MinimumLength = 8)]
@@ -16,6 +16,8 @@ namespace Repository.ViewModels
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
 
+        public string UserId { get; set; }
+        
         public string Code { get; set; }
     }
 }

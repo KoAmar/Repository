@@ -27,17 +27,18 @@ namespace Repository
         {
             services.AddControllersWithViews();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration
+                    .GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IUserValidator<User>, CustomEmailValidator>();
             services.AddScoped<IProjectsRepos, CourseProjRepos>();
             services.AddIdentity<User, IdentityRole>(opts =>
                 {
-                    opts.Password.RequiredLength = 8; // минимальная длина
-                    opts.Password.RequireNonAlphanumeric = false; // требуются ли не алфавитно-цифровые символы
-                    opts.Password.RequireLowercase = true; // требуются ли символы в нижнем регистре
-                    opts.Password.RequireUppercase = true; // требуются ли символы в верхнем регистре
-                    opts.Password.RequireDigit = true; // требуются ли цифры
+                    opts.Password.RequiredLength = 8;
+                    opts.Password.RequireNonAlphanumeric = false;
+                    opts.Password.RequireLowercase = true;
+                    opts.Password.RequireUppercase = true;
+                    opts.Password.RequireDigit = true;
 
                     opts.SignIn.RequireConfirmedEmail = true;
                 })
