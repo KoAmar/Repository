@@ -11,5 +11,7 @@ namespace Repository.Models.DatabaseModels
         [Required] public string FilePath { get; set; }
 
         [Required] [MaxLength(450)] public string ProjectId { get; set; }
+
+        public CourseProject Project { get; set; }
     }
 }

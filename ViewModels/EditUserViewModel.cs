@@ -30,7 +30,9 @@ namespace Repository.ViewModels
         [Display(Name = "Подтвердить пароль")]
         public string PasswordConfirm { get; set; }
 
-
+        // [StringLength(maximumLength: 9, MinimumLength = 7)]
+        public string GroupNumber { get; set; }
+        
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Year < MinValidYear || Year > DateTime.Now.Year)

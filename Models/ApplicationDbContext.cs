@@ -20,43 +20,64 @@ namespace Repository.Models
 
         public DbSet<FileModel> Files { get; set; }
 
+        public DbSet<Discipline> Disciplines { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            SeedRoles(modelBuilder);
+            
+            SeedDiscipline(modelBuilder);
             SeedUsers(modelBuilder);
+            SeedRoles(modelBuilder);
             SeedUserRoles(modelBuilder);
         }
 
-        private void SeedUsers(ModelBuilder builder)
+        void SeedDiscipline(ModelBuilder builder)
         {
+            builder.Entity<Discipline>().HasData(
+                new Discipline
+                {
+                    Id = "1", Name = "Компьютерные системы и сети"
+                },
+                new Discipline
+                {
+                    Id = "2", Name = "Базы данных"
+                },
+                new Discipline
+                {
+                    Id = "3", Name = "Разработка WEB-приложений"
+                }
+            );
+        }
 
-            User user = new User()
+        void SeedUsers(ModelBuilder builder)
+        {
+            var user = new User()
             {
-               Id = "68ccc708-a60f-457a-9562-2b4e3daa8c41",
-               Year = 2000,
-               FirstName = "Pavel",
-               Surname = "Halavanau",
-               UserName = "pa1318vel@gmail.com",
-               NormalizedUserName = "PA1318VEL@GMAIL.COM",
-               Email = "pa1318vel@gmail.com",
-               NormalizedEmail = "PA1318VEL@GMAIL.COM",
-               EmailConfirmed = true,
-               PasswordHash = "AQAAAAEAACcQAAAAEB6KIJYXSh7Sn+mG9MtfhG88yEauqFtQ+XowmR1BpOM7j1mNjcaFe+z//+a0v8w2xA==",
-               SecurityStamp = "WPH2JEXSMURUHSJ6U3RACIKZPDE6W2E7",
-               ConcurrencyStamp = "c7df8df5 - 773d - 4b24-a757-e6ab4c7ad499",
-               PhoneNumberConfirmed = false,
-               TwoFactorEnabled = false,
-               LockoutEnabled = true,
-               AccessFailedCount = 0
+                Id = "68ccc708-a60f-457a-9562-2b4e3daa8c41",
+                Year = 2000,
+                FirstName = "Pavel",
+                Surname = "Halavanau",
+                UserName = "pa1318vel@gmail.com",
+                NormalizedUserName = "PA1318VEL@GMAIL.COM",
+                Email = "pa1318vel@gmail.com",
+                NormalizedEmail = "PA1318VEL@GMAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash =
+                    "AQAAAAEAACcQAAAAEB6KIJYXSh7Sn+mG9MtfhG88yEauqFtQ+XowmR1BpOM7j1mNjcaFe+z//+a0v8w2xA==",
+                SecurityStamp = "WPH2JEXSMURUHSJ6U3RACIKZPDE6W2E7",
+                ConcurrencyStamp = "c7df8df5 - 773d - 4b24-a757-e6ab4c7ad499",
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
             };
-            
+
             builder.Entity<User>()
                 .HasData(user);
         }
 
-        private void SeedRoles(ModelBuilder builder)
+        void SeedRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>()
                 .HasData(
@@ -70,14 +91,21 @@ namespace Repository.Models
                     new IdentityRole()
                     {
                         Id = "c7b013f0-5201-4317-abd8-c211f91b7330",
-                        Name = "User",
+                        Name = "Student",
                         ConcurrencyStamp = "2",
-                        NormalizedName = "USER",
+                        NormalizedName = "STUDENT",
+                    },
+                    new IdentityRole()
+                    {
+                        Id = "33",
+                        Name = "Teacher",
+                        ConcurrencyStamp = "3",
+                        NormalizedName = "TEACHER",
                     }
                 );
         }
 
-        private void SeedUserRoles(ModelBuilder builder)
+        void SeedUserRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityUserRole<string>>()
                 .HasData(

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Repository.Models;
 using Repository.Models.DatabaseModels;
 using Repository.ViewModels;
@@ -17,11 +19,15 @@ namespace Repository.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(UserManager<User> userManager, ApplicationDbContext context)
+        public UsersController(UserManager<User> userManager,
+            ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _context = context;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -32,7 +38,8 @@ namespace Repository.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound();
+            if (user == null)
+                return NotFound();
             var model = new EditUserViewModel
             {
                 Id = user.Id,
@@ -49,12 +56,14 @@ namespace Repository.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+                return View(model);
 
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Пользователь не найден");
+                ModelState.AddModelError(string.Empty,
+                    "Пользователь не найден");
                 return View(model);
             }
 
@@ -68,7 +77,8 @@ namespace Repository.Controllers
             if (model.Password != null)
                 if (HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) is IPasswordHasher<User>
                     passwordHasher)
-                    user.PasswordHash = passwordHasher.HashPassword(user, model.Password);
+                    user.PasswordHash = passwordHasher.HashPassword(user,
+                        model.Password);
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -77,14 +87,17 @@ namespace Repository.Controllers
                 return RedirectToAction("Index");
             }
 
-            foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty,
+                    error.Description);
             return View(model);
         }
 
         public async Task<ActionResult> Delete(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound();
+            if (user == null)
+                return NotFound();
 
             const string errorMessage = "Ошибка удалениия, вероятнее всего к этому" +
                                         " пользователю приявязан проект или другая сущность.";
@@ -96,13 +109,28 @@ namespace Repository.Controllers
             catch (SqlException e)
             {
                 Console.WriteLine(e);
-                return View("Message", errorMessage);
+                return View("Message",
+                    errorMessage);
             }
             catch (DbUpdateException e)
             {
                 Console.WriteLine(e);
-                return View("Message", errorMessage);
+                return View("Message",
+                    errorMessage);
             }
+        }
+
+        public IActionResult FilterIndex(string roleId)
+        {
+            
+            var userIds= _context.UserRoles
+                .Where(a => a.RoleId == roleId)
+                .Select(b => b.UserId).Distinct() .ToList();           
+
+           var listUsers=   _context.Users.Where(a => userIds.Any(c => c == a.Id)).ToList();
+            
+            
+            return View("Index", listUsers);
         }
     }
 }

@@ -1,45 +1,63 @@
-﻿@model IEnumerable<Repository.Models.DatabaseModels.User>
+﻿@using Repository.Models.DatabaseModels
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<Repository.Models.DatabaseModels.User>
+@inject UserManager<User> _userManager
+
 @{
   ViewBag.Title = "Список пользователей";
 }
 <h1>Список пользователей</h1>
+<br>
+@if (!Model.Any())
+{
+  <div class="text-center">
+    <h3 class="text-muted my-5">Пользователи не найдены =(</h3>
+    <h1 class="my-5"> </h1>
+  </div>
+}
+else
+{
+  <table class="table mt-3">
 
-<table class="table mt-3">
-  <tr>
-    <th>Подтверждён</th><th>Email</th><th></th>
-  </tr>
-  @foreach (var user in Model)
-  {
     <tr>
-      <td>
-        @if (user.EmailConfirmed)
-        {
-          
-        <p class="text-success">Да</p>
-        }
-        else
-        {
-          
-        <p class="text-danger">Нет</p>
-        }
-      </td>
-      <td>@user.Email</td>
-      <td>
-      <div class="row">
-        <div class="col-md-4">
-          <a class="btn btn-danger m-1" asp-action="Delete" asp-route-id="@user.Id">
-            Удалить
-          </a>
-        </div>
-        <div class="col-md-4">
-          <a class="btn btn-outline-warning m-1" asp-action="Edit" asp-route-id="@user.Id">Изменить данные</a>
-        </div>
-        <div class="col-md-4">
-          <a class="btn btn-outline-warning m-1" asp-controller="Roles" asp-action="Edit" asp-route-userid="@user.Id">
-            Права доступа
-          </a>
-        </div>
-      </div>
+      <th>Подтверждён</th><th>Email</th><th></th>
     </tr>
-  }
-</table>
+    @foreach (var user in Model)
+    {
+      <tr>
+        <td>
+          @if (user.EmailConfirmed)
+          {
+            <p class="text-success">Да</p>
+          }
+          else
+          {
+            <p class="text-danger">Нет</p>
+          }
+        </td>
+        <td>@user.Email</td>
+        <td>
+        <div class="row">
+          @if (@user.Id != _userManager.GetUserId(User))
+          {
+            <div class="col-md-4">
+
+              <a class="btn btn-danger m-1" asp-action="Delete" asp-route-id="@user.Id">
+                Удалить
+              </a>
+            </div>
+            <div class="col-md-4">
+              <a class="btn btn-outline-warning m-1" asp-action="Edit" asp-route-id="@user.Id">Изменить данные</a>
+            </div>
+            <div class="col-md-4">
+              <a class="btn btn-outline-warning m-1" asp-controller="Roles" asp-action="Edit" asp-route-userid="@user.Id">
+                Права доступа
+              </a>
+            </div>
+          }
+        </div>
+
+      </tr>
+    }
+  </table>
+}

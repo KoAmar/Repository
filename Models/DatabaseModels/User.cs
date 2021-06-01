@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace Repository.Models.DatabaseModels
@@ -12,5 +13,10 @@ namespace Repository.Models.DatabaseModels
         [Required] public string Surname { get; set; }
 
         public string Patronymic { get; set; }
+
+        private List<CourseProject> CourseProjects { get; set; }
+
+        // [StringLength(maximumLength: 9, MinimumLength = 7)]
+        public string GroupNumber { get; set; }
     }
 }

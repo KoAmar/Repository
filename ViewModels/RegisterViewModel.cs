@@ -24,6 +24,10 @@ namespace Repository.ViewModels
         [Display(Name = "Год рождения")]
         public int Year { get; set; }
 
+        // [StringLength(maximumLength: 9, MinimumLength = 7)]
+        [Display(Name = "Номер группы")]
+        public string GroupNumber { get; set; }
+
         [Required(ErrorMessage = "Введите пароль")]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]

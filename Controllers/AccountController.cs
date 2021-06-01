@@ -45,7 +45,8 @@ namespace Repository.Controllers
                 FirstName = model.FirstName,
                 Surname = model.Surname,
                 Patronymic = model.Patronymic,
-                Year = model.Year
+                Year = model.Year,
+                GroupNumber = model.GroupNumber
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -84,7 +85,7 @@ namespace Repository.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded) return View("Error");
 
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, "Student");
             return View("Message", "Ваша почта подтверждена, теперь вы можете войти, используя её.");
         }
 

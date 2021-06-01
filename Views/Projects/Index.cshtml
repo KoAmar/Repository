@@ -8,7 +8,7 @@
 }
 
 <h1 >Список курсовых проектов</h1>
-<div class="row justify-content-center ">
+<div class="row justify-content-center mt-5">
 
   <div class="mt-3 col-md-8 d-flex flex-column  justify-content-center">
 
@@ -42,7 +42,11 @@
         <div class="card-header d-flex justify-content-between bg-light">
           <h3 class="card-title">@project.Title</h3>
           <h6 class="card-title text-muted">
-            @_userManager.FindByIdAsync(project.UserId).Result.Email в @project.CreationDate
+
+            @{
+              var email = _userManager.FindByIdAsync(project.UserId).Result.Email;
+            }
+            <a href= "mailto:@email">@email</a> в @project.CreationDate
           </h6>
         </div>
         <div class="card-body bg-light">
@@ -54,7 +58,7 @@
              asp-route-id="@project.Id">
             Открыть
           </a>
-          @if (project.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+          @if (User.IsInRole("Admin"))
           {
             <a class="my-1 btn btn-outline-secondary" asp-controller="Projects" asp-action="EditProject"
                asp-route-id="@project.Id">
@@ -68,7 +72,7 @@
         </div>
       </div>
     }
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity.IsAuthenticated && Model.Projects.Any())
     {
       <a class="btn btn-outline-secondary my-3" asp-controller="Projects" asp-action="CreateProject">Создать</a>
     }

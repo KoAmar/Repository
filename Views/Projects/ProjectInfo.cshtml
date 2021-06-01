@@ -6,22 +6,35 @@
 @{
   ViewData["Title"] = "Страница проекта";
   var user = _userManager.FindByIdAsync(Model.Project.UserId).Result;
+  var manager = _userManager.FindByIdAsync(Model.Project.ProjectManagerId).Result;
 }
 <h2 >Страница курсовго проекта</h2>
 <div class="row justify-content-center mt-3 mx-1">
   <div class="col-md-8 mx-0">
     <div class="card">
       <div class="card-body">
-        <h2 class="card-title">@Model.Project.Title </h2>
+        <h2 class="card-title">Тема курсового проекта:@Model.Project.Title </h2>
         <h6 class="card-subtitle text-muted">
-          Создано @user.Email - @user.Surname @user.FirstName @user.Patronymic в @Model.Project.CreationDate
+          Создано <a href="mailto:@user.Email">@user.Email</a> - @user.Surname @user.FirstName @user.Patronymic в @Model.Project.CreationDate
         </h6>
-        <p class="card-text mt-2">
-          @Model.Project.Description
-        </p>
+        <br>
+
+
+        <div class="jumbotron p-3">
+          <h4 class="card-subtitle">Описание курсового проекта:</h4>
+          <br>
+          <p class="card-text mt-2">
+            @Model.Project.Description
+          </p>
+        </div>
+
+        <h6 class="card-subtitle text-muted">
+          Руководитель проекта: <a href="mailto:@manager.Email">@manager.Email</a> - @manager.Surname @manager.FirstName @manager.Patronymic
+        </h6>
       </div>
+
       <div class="card-footer d-flex flex-column  justify-content-center">
-        @if (Model.Project.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+        @if (User.IsInRole("Admin"))
         {
           <a class="btn btn-outline-primary my-1" asp-controller="Projects"
              asp-action="EditProject" asp-route-id="@Model.Project.Id">
@@ -45,10 +58,14 @@
       {
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
+            @if (User.IsInRole("Admin") && User.IsInRole("Teacher"))
+            {
+              
             <a class="btn btn-outline-info" asp-controller="Files"
                asp-action="TryDownloadFile" asp-route-fileId="@f.Id">
               Скачать
             </a>
+            }
             @f.Name
           </li>
         </ul>

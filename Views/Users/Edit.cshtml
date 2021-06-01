@@ -16,7 +16,6 @@
       }
       @if (userId != null)
       {
-        @userId
         @_userManager.FindByIdAsync(userId).Result.Surname
         @_userManager.FindByIdAsync(userId).Result.FirstName
         @_userManager.FindByIdAsync(userId).Result.Patronymic
@@ -45,6 +44,11 @@
         <label asp-for="Patronymic"></label>
         <input asp-for="Patronymic" class="form-control"/>
         <span asp-validation-for="Patronymic" class="text-danger"></span>
+      </div>
+      <div>
+        <label asp-for="Year"></label><br/>
+        <input asp-for="Year" class="form-control"/>
+        <span asp-validation-for="Year" class="text-danger"></span>
       </div>
       <div>
         <label asp-for="Year"></label><br/>
