@@ -30,6 +30,7 @@ namespace Repository.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Patronymic = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GroupNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -48,6 +49,18 @@ namespace Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Disciplines",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Disciplines", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,17 +177,31 @@ namespace Repository.Migrations
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DisciplineId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProjectManagerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CourseProjects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CourseProjects_AspNetUsers_ProjectManagerId",
+                        column: x => x.ProjectManagerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CourseProjects_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CourseProjects_Disciplines_DisciplineId",
+                        column: x => x.DisciplineId,
+                        principalTable: "Disciplines",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -200,17 +227,27 @@ namespace Repository.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "1", "Admin", "ADMIN" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "c7b013f0-5201-4317-abd8-c211f91b7330", "2", "User", "USER" });
+                values: new object[,]
+                {
+                    { "fab4fac1-c546-41de-aebc-a14da6895711", "1", "Admin", "ADMIN" },
+                    { "c7b013f0-5201-4317-abd8-c211f91b7330", "2", "Student", "STUDENT" },
+                    { "33", "3", "Teacher", "TEACHER" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Patronymic", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName", "Year" },
-                values: new object[] { "68ccc708-a60f-457a-9562-2b4e3daa8c41", 0, "c7df8df5 - 773d - 4b24-a757-e6ab4c7ad499", "pa1318vel@gmail.com", true, "Pavel", true, null, "PA1318VEL@GMAIL.COM", "PA1318VEL@GMAIL.COM", "AQAAAAEAACcQAAAAEB6KIJYXSh7Sn+mG9MtfhG88yEauqFtQ+XowmR1BpOM7j1mNjcaFe+z//+a0v8w2xA==", null, null, false, "WPH2JEXSMURUHSJ6U3RACIKZPDE6W2E7", "Halavanau", false, "pa1318vel@gmail.com", 2000 });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "GroupNumber", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Patronymic", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName", "Year" },
+                values: new object[] { "68ccc708-a60f-457a-9562-2b4e3daa8c41", 0, "c7df8df5 - 773d - 4b24-a757-e6ab4c7ad499", "pa1318vel@gmail.com", true, "Pavel", null, true, null, "PA1318VEL@GMAIL.COM", "PA1318VEL@GMAIL.COM", "AQAAAAEAACcQAAAAEB6KIJYXSh7Sn+mG9MtfhG88yEauqFtQ+XowmR1BpOM7j1mNjcaFe+z//+a0v8w2xA==", null, null, false, "WPH2JEXSMURUHSJ6U3RACIKZPDE6W2E7", "Halavanau", false, "pa1318vel@gmail.com", 2000 });
+
+            migrationBuilder.InsertData(
+                table: "Disciplines",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { "1", "Компьютерные системы и сети" },
+                    { "2", "Базы данных" },
+                    { "3", "Разработка WEB-приложений" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -257,6 +294,16 @@ namespace Repository.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CourseProjects_DisciplineId",
+                table: "CourseProjects",
+                column: "DisciplineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseProjects_ProjectManagerId",
+                table: "CourseProjects",
+                column: "ProjectManagerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CourseProjects_UserId",
                 table: "CourseProjects",
                 column: "UserId");
@@ -295,6 +342,9 @@ namespace Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Disciplines");
         }
     }
 }

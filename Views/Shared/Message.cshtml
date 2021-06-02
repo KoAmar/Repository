@@ -3,8 +3,7 @@
   ViewData["Title"] = "Message";
 }
 
-<h3 class="text-info">@Model</h3>
-
+<h3 class="text-info">@Html.Raw(Model)</h3>
 <br/>
 <a asp-action="Index" asp-controller="Projects">
   Нажмите здесь чтобы вернуться на главную

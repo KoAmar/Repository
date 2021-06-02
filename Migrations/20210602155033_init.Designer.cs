@@ -10,8 +10,8 @@ using Repository.Models;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210601000933_GroupNumber-ProjectManager-Discipline")]
-    partial class GroupNumberProjectManagerDiscipline
+    [Migration("20210602155033_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,8 +59,15 @@ namespace Repository.Migrations
                         {
                             Id = "c7b013f0-5201-4317-abd8-c211f91b7330",
                             ConcurrencyStamp = "2",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            Name = "Student",
+                            NormalizedName = "STUDENT"
+                        },
+                        new
+                        {
+                            Id = "33",
+                            ConcurrencyStamp = "3",
+                            Name = "Teacher",
+                            NormalizedName = "TEACHER"
                         });
                 });
 
@@ -188,10 +195,11 @@ namespace Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisciplineId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProjectManagerId")
-                        .HasMaxLength(450)
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
@@ -199,7 +207,6 @@ namespace Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -211,6 +218,36 @@ namespace Repository.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("CourseProjects");
+                });
+
+            modelBuilder.Entity("Repository.Models.DatabaseModels.Discipline", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Disciplines");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            Name = "Компьютерные системы и сети"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Name = "Базы данных"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Name = "Разработка WEB-приложений"
+                        });
                 });
 
             modelBuilder.Entity("Repository.Models.DatabaseModels.FileModel", b =>
@@ -262,8 +299,7 @@ namespace Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GroupNumber")
-                        .HasMaxLength(9)
-                        .HasColumnType("nvarchar(9)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -342,19 +378,6 @@ namespace Repository.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Repository.Models.Discipline", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Discipline");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -408,13 +431,17 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Repository.Models.DatabaseModels.CourseProject", b =>
                 {
-                    b.HasOne("Repository.Models.Discipline", "Discipline")
-                        .WithMany()
-                        .HasForeignKey("DisciplineId");
+                    b.HasOne("Repository.Models.DatabaseModels.Discipline", "Discipline")
+                        .WithMany("CourseProjects")
+                        .HasForeignKey("DisciplineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Repository.Models.DatabaseModels.User", "ProjectManager")
                         .WithMany()
-                        .HasForeignKey("ProjectManagerId");
+                        .HasForeignKey("ProjectManagerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Repository.Models.DatabaseModels.User", "User")
                         .WithMany()
@@ -436,6 +463,11 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Repository.Models.DatabaseModels.Discipline", b =>
+                {
+                    b.Navigation("CourseProjects");
                 });
 #pragma warning restore 612, 618
         }

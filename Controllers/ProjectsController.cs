@@ -59,16 +59,22 @@ namespace Repository.Controllers
         [AllowAnonymous]
         public IActionResult ProjectInfo(string id)
         {
-            var courseProject = _courseProjects.GetCourseProject(id);
+            var courseProject = _context.CourseProjects
+                .Include(p => p.Discipline)
+                .FirstOrDefault(project => project.Id == id);;
             if (courseProject == null) return NotFound();
 
             var fileModels = _context.Files.Where(file => file.ProjectId == courseProject.Id).ToList();
 
+             
+            _context.CourseProjects.Find(id);
             var projectAndFiles = new ProjectAndFilesViewModel
             {
                 Project = courseProject,
                 FileModels = fileModels
             };
+            
+            
 
             return View(projectAndFiles);
         }

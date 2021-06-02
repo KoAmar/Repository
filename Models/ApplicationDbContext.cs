@@ -13,7 +13,7 @@ namespace Repository.Models
         {
             // CourseProjects = courseProjects;
             // Database.EnsureDeleted();
-            Database.EnsureCreated();
+            // Database.EnsureCreated();
         }
 
         public DbSet<CourseProject> CourseProjects { get; set; }

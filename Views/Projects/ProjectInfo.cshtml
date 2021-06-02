@@ -14,8 +14,13 @@
     <div class="card">
       <div class="card-body">
         <h2 class="card-title">Тема курсового проекта:@Model.Project.Title </h2>
+        <h2 class="card-title">Дисциплина:@Model.Project.Discipline.Name </h2>
         <h6 class="card-subtitle text-muted">
           Создано <a href="mailto:@user.Email">@user.Email</a> - @user.Surname @user.FirstName @user.Patronymic в @Model.Project.CreationDate
+          @if (user.GroupNumber != null)
+          {
+            <h6>Номер групы: @user.GroupNumber</h6>
+          }
         </h6>
         <br>
 
@@ -60,11 +65,10 @@
           <li class="list-group-item">
             @if (User.IsInRole("Admin") && User.IsInRole("Teacher"))
             {
-              
-            <a class="btn btn-outline-info" asp-controller="Files"
-               asp-action="TryDownloadFile" asp-route-fileId="@f.Id">
-              Скачать
-            </a>
+              <a class="btn btn-outline-info" asp-controller="Files"
+                 asp-action="TryDownloadFile" asp-route-fileId="@f.Id">
+                Скачать
+              </a>
             }
             @f.Name
           </li>

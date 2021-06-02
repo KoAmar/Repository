@@ -16,10 +16,11 @@ namespace Repository.Models.DatabaseModels
         [Required(ErrorMessage = "Требуется описание!")]
         public string Description { get; set; }
 
-        [MaxLength(450)] public string UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
         [Required(ErrorMessage = "Выберите дисциплину!")]
+        [MaxLength(450)]
         public string DisciplineId { get; set; }
 
         public Discipline Discipline { get; set; }

@@ -25,11 +25,15 @@
           @{
             Debug.Assert(User.Identity != null, "User.Identity != null");
           }
+          <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Discipline" asp-action="Index">Дисциплины</a>
+          </li>
           @if (User.Identity.IsAuthenticated)
           {
             <li class="nav-item">
               <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="MyProjects">Мои проекты</a>
             </li>
+
             @if (User.IsInRole("Admin"))
             {
               <li class="nav-item">

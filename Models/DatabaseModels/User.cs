@@ -14,7 +14,7 @@ namespace Repository.Models.DatabaseModels
 
         public string Patronymic { get; set; }
 
-        private List<CourseProject> CourseProjects { get; set; }
+        // public List<CourseProject> CourseProjects { get; set; }
 
         // [StringLength(maximumLength: 9, MinimumLength = 7)]
         public string GroupNumber { get; set; }
