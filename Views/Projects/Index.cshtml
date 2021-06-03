@@ -55,7 +55,7 @@
             @{
               var email = _userManager.FindByIdAsync(project.UserId).Result.Email;
             }
-            <a href="mailto:@email">@email</a> в @project.CreationDate
+            <a href="mailto:@email">@email</a>, @project.CreationDate.ToLongDateString()
           </h6>
         </div>
         <div class="card-body bg-light">
