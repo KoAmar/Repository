@@ -20,7 +20,7 @@ else
   <table class="table mt-3">
 
     <tr>
-      <th>Подтверждён</th><th>Email</th><th></th>
+      <th>Подтверждён</th><th>Email</th><th>ФИО</th><th>Роли</th><th></th>
     </tr>
     @foreach (var user in Model)
     {
@@ -36,22 +36,24 @@ else
           }
         </td>
         <td>@user.Email</td>
+        <td>@user.Surname @user.FirstName @user.Patronymic</td>
+        <td>@string.Join(",", _userManager.GetRolesAsync(user).Result)</td>
         <td>
         <div class="row">
           @if (@user.Id != _userManager.GetUserId(User))
           {
             <div class="col-md-4">
-
-              <a class="btn btn-danger m-1" asp-action="Delete" asp-route-id="@user.Id">
-                Удалить
-              </a>
-            </div>
-            <div class="col-md-4">
               <a class="btn btn-outline-warning m-1" asp-action="Edit" asp-route-id="@user.Id">Изменить данные</a>
             </div>
             <div class="col-md-4">
               <a class="btn btn-outline-warning m-1" asp-controller="Roles" asp-action="Edit" asp-route-userid="@user.Id">
-                Права доступа
+                Изменить роли
+              </a>
+            </div>
+            <div class="col-md-4">
+
+              <a class="btn btn-outline-danger m-1" asp-action="Delete" asp-route-id="@user.Id">
+                Удалить
               </a>
             </div>
           }

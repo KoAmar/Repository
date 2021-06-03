@@ -45,7 +45,6 @@ namespace Repository.Controllers
                 FirstName = model.FirstName,
                 Surname = model.Surname,
                 Patronymic = model.Patronymic,
-                Year = model.Year,
                 GroupNumber = model.GroupNumber
             };
 

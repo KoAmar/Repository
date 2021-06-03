@@ -19,10 +19,6 @@ namespace Repository.ViewModels
 
         [Display(Name = "Отчество")] public string Patronymic { get; set; }
 
-        [Required(ErrorMessage = "Требуется ввести год рождения")]
-        [YearValidation(1900)]
-        [Display(Name = "Год рождения")]
-        public int Year { get; set; }
 
         // [StringLength(maximumLength: 9, MinimumLength = 7)]
         [Display(Name = "Номер группы")]

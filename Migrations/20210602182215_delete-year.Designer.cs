@@ -10,8 +10,8 @@ using Repository.Models;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210602155033_init")]
-    partial class init
+    [Migration("20210602182215_delete-year")]
+    partial class deleteyear
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -196,10 +196,12 @@ namespace Repository.Migrations
 
                     b.Property<string>("DisciplineId")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProjectManagerId")
                         .IsRequired()
+                        .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
@@ -341,9 +343,6 @@ namespace Repository.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -373,8 +372,7 @@ namespace Repository.Migrations
                             SecurityStamp = "WPH2JEXSMURUHSJ6U3RACIKZPDE6W2E7",
                             Surname = "Halavanau",
                             TwoFactorEnabled = false,
-                            UserName = "pa1318vel@gmail.com",
-                            Year = 2000
+                            UserName = "pa1318vel@gmail.com"
                         });
                 });
 

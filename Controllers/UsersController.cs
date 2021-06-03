@@ -47,7 +47,7 @@ namespace Repository.Controllers
                 FirstName = user.FirstName,
                 Surname = user.Surname,
                 Patronymic = user.Patronymic,
-                Year = user.Year
+                GroupNumber = user.GroupNumber
             };
             return View(model);
         }
@@ -72,7 +72,7 @@ namespace Repository.Controllers
             user.Surname = model.Surname;
             user.FirstName = model.FirstName;
             user.Patronymic = model.Patronymic;
-            user.Year = model.Year;
+            user.GroupNumber = model.GroupNumber;
 
             if (model.Password != null)
                 if (HttpContext.RequestServices.GetService(typeof(IPasswordHasher<User>)) is IPasswordHasher<User>

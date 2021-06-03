@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Repository.ViewModels
 {
-    public class EditUserViewModel : IValidatableObject
+    public class EditUserViewModel
     {
-        private const int MinValidYear = 1900;
         public string Id { get; set; }
 
         [Required] [Display(Name = "Email")] public string Email { get; set; }
@@ -17,9 +16,6 @@ namespace Repository.ViewModels
 
         [Display(Name = "Отчество")] public string Patronymic { get; set; }
 
-        [Required]
-        [Display(Name = "Год рождения")]
-        public int Year { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
@@ -31,14 +27,7 @@ namespace Repository.ViewModels
         public string PasswordConfirm { get; set; }
 
         // [StringLength(maximumLength: 9, MinimumLength = 7)]
+        [Display(Name = "Номер группы")]
         public string GroupNumber { get; set; }
-        
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (Year < MinValidYear || Year > DateTime.Now.Year)
-                yield return new ValidationResult(
-                    $"Ошибка года рождения \"{MinValidYear}\".",
-                    new[] {nameof(Year)});
-        }
     }
 }

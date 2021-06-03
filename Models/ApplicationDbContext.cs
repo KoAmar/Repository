@@ -13,7 +13,7 @@ namespace Repository.Models
         {
             // CourseProjects = courseProjects;
             // Database.EnsureDeleted();
-            // Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         public DbSet<CourseProject> CourseProjects { get; set; }
@@ -55,7 +55,6 @@ namespace Repository.Models
             var user = new User()
             {
                 Id = "68ccc708-a60f-457a-9562-2b4e3daa8c41",
-                Year = 2000,
                 FirstName = "Pavel",
                 Surname = "Halavanau",
                 UserName = "pa1318vel@gmail.com",

@@ -11,22 +11,22 @@
 <h2 >Страница курсовго проекта</h2>
 <div class="row justify-content-center mt-3 mx-1">
   <div class="col-md-8 mx-0">
-    <div class="card">
+    <div class="card mt-3">
       <div class="card-body">
-        <h2 class="card-title">Тема курсового проекта:@Model.Project.Title </h2>
-        <h2 class="card-title">Дисциплина:@Model.Project.Discipline.Name </h2>
-        <h6 class="card-subtitle text-muted">
-          Создано <a href="mailto:@user.Email">@user.Email</a> - @user.Surname @user.FirstName @user.Patronymic в @Model.Project.CreationDate
-          @if (user.GroupNumber != null)
-          {
-            <h6>Номер групы: @user.GroupNumber</h6>
-          }
+        <h4 class="card-title mb-1">Тема курсового проекта: @Model.Project.Title </h4>
+        <h5 class="card-title text-muted">Дисциплина: @Model.Project.Discipline.Name </h5>
+        <h6 class="card-subtitle text-muted mt-4">
+          Создано: <a href="mailto:@user.Email">@user.Email</a><br>
+          фИО: @user.Surname @user.FirstName @user.Patronymic
         </h6>
-        <br>
-
-
+        @if (user.GroupNumber != null)
+        {
+          <h6 class="text-muted mb-0">Номер групы: @user.GroupNumber</h6>
+        }
+        <h6 class="text-muted mb-5">Дата создания: @Model.Project.CreationDate</h6>
+        
         <div class="jumbotron p-3">
-          <h4 class="card-subtitle">Описание курсового проекта:</h4>
+          <h5 class="card-subtitle">Описание курсового проекта:</h5>
           <br>
           <p class="card-text mt-2">
             @Model.Project.Description
@@ -34,13 +34,14 @@
         </div>
 
         <h6 class="card-subtitle text-muted">
-          Руководитель проекта: <a href="mailto:@manager.Email">@manager.Email</a> - @manager.Surname @manager.FirstName @manager.Patronymic
+          Руководитель проекта: <a href="mailto:@manager.Email">@manager.Email</a><br>
+          @manager.Surname @manager.FirstName @manager.Patronymic
         </h6>
       </div>
+      @if (User.IsInRole("Admin"))
+      {
+        <div class="card-footer d-flex flex-column  justify-content-center">
 
-      <div class="card-footer d-flex flex-column  justify-content-center">
-        @if (User.IsInRole("Admin"))
-        {
           <a class="btn btn-outline-primary my-1" asp-controller="Projects"
              asp-action="EditProject" asp-route-id="@Model.Project.Id">
             Редактировать
@@ -49,8 +50,9 @@
              asp-action="DeleteProject" asp-route-id="@Model.Project.Id">
             Удалить
           </a>
-        }
-      </div>
+        </div>
+      }
+
     </div>
 
     <div class="mt-3 card card-body">
@@ -63,7 +65,7 @@
       {
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
-            @if (User.IsInRole("Admin") && User.IsInRole("Teacher"))
+            @if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
             {
               <a class="btn btn-outline-info" asp-controller="Files"
                  asp-action="TryDownloadFile" asp-route-fileId="@f.Id">

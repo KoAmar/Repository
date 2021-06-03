@@ -22,14 +22,26 @@ namespace Repository.Controllers
         // GET: Discipline
         public ActionResult Index()
         {
-            return View(_context.Disciplines.ToList());
+            return View(_context.Disciplines.Include(d => d.CourseProjects).ToList());
         }
-        //
-        // // GET: Discipline/Details/5
-        // public ActionResult Details(int id)
-        // {
-        //     return View();
-        // }
+
+        public ActionResult IndexDiscipline(string id)
+        {
+            var model = _context
+                .Disciplines
+                .Include(d => d.CourseProjects)
+                .FirstOrDefault(d => d.Id == id);
+
+            if (model != null)
+            {
+                ViewData["Title"] = $"Проекты с дисциплиной \"{model.Name}\"";
+
+                return View("MyProjects", model.CourseProjects);
+            }
+
+            return NotFound();
+        }
+
 
         // GET: Discipline/Create
         public ActionResult Create()
@@ -83,19 +95,18 @@ namespace Repository.Controllers
         // GET: Discipline/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
-            
             var discipline = await _context.Disciplines
-                .Include(d=>d.CourseProjects)
-                .FirstOrDefaultAsync(d=>d.Id == id);
-            
+                .Include(d => d.CourseProjects)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
             if (discipline == null) return View("Error");
-            
+
             if (discipline.CourseProjects.Any())
             {
                 var s = string.Join("<br/>- ", discipline.CourseProjects.Select(c => c.Title));
                 return View("Message", $"На дисциплину ссылаются следующие проекты:<br>- {s}");
             }
-            
+
             _context.Disciplines.Remove(discipline);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");

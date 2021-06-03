@@ -33,8 +33,17 @@ namespace Repository.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index(IndexProjectViewModel.Sort sort, int pageId = 1)
+        public IActionResult Index(IndexProjectViewModel.Sort sort, string findName, int pageId = 1)
         {
+            if (!string.IsNullOrEmpty(findName))
+            {
+                ViewData["Title"] = $"Результаты поиска \"{findName}\"";
+
+                var result = _context.CourseProjects
+                    .Where(p => EF.Functions.Like(p.Title, $"%{findName}%"));
+                return View("MyProjects",result.ToList());
+            }
+
             var projects = _courseProjects.GetAllCourseProjects().ToList();
 
             IEnumerable<CourseProject> sortedProjects = sort switch
@@ -61,20 +70,20 @@ namespace Repository.Controllers
         {
             var courseProject = _context.CourseProjects
                 .Include(p => p.Discipline)
-                .FirstOrDefault(project => project.Id == id);;
+                .FirstOrDefault(project => project.Id == id);
+            ;
             if (courseProject == null) return NotFound();
 
             var fileModels = _context.Files.Where(file => file.ProjectId == courseProject.Id).ToList();
 
-             
+
             _context.CourseProjects.Find(id);
             var projectAndFiles = new ProjectAndFilesViewModel
             {
                 Project = courseProject,
                 FileModels = fileModels
             };
-            
-            
+
 
             return View(projectAndFiles);
         }
@@ -150,7 +159,7 @@ namespace Repository.Controllers
             _context.CourseProjects.Update(project);
             _context.SaveChangesAsync();
 
-            return RedirectToAction("EditProject", new {id = project.Id});
+            return RedirectToAction("ProjectInfo", new {id = project.Id});
         }
 
         public IActionResult DeleteProject(string id)
@@ -185,9 +194,11 @@ namespace Repository.Controllers
 
         public IActionResult MyProjects()
         {
+            ViewData["Title"] = "Мои проекты";
+
             return View(_courseProjects.GetAllCourseProjects()
                 .Where(p => p.UserId == _userManager.GetUserId(User))
-                .OrderByDescending(p => p.CreationDate)
+                .OrderByDescending(p => p.CreationDate).ToList()
             );
         }
     }
